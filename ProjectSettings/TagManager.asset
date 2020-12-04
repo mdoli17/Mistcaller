@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - movable
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - 
+  - 
+  - Player
+  - Mist
+  - Movable
+  - Handle
+  - Enemy
+  - Breakable
+  - Light
+  - Background
+  - Playable Areas
+  - Rope
+  - Obstacle
+  - Interactable
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: Background
+    uniqueID: 1057506011
+    locked: 0
+  - name: Midground
+    uniqueID: 252253949
+    locked: 0
+  - name: Playable Layer
+    uniqueID: 1684984911
+    locked: 0
+  - name: Foreground
+    uniqueID: 2808851219
+    locked: 0
+  - name: Front
+    uniqueID: 598607169
+    locked: 0
