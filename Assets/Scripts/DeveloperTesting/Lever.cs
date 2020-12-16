@@ -10,6 +10,7 @@ public class Lever : MonoBehaviour, Interactable
 
     private BoxCollider2D playerChecker;
 
+    private Player player;
     void Start()
     {
         playerChecker = GetComponent<BoxCollider2D>();
@@ -21,6 +22,22 @@ public class Lever : MonoBehaviour, Interactable
         if(LeverInteractDelegate != null)
         {
             LeverInteractDelegate();
+            player.SetPlayerState(PlayerState.IDLE);
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other) {
+        if(other.gameObject.layer == LayerMask.NameToLayer("Player"))
+        {
+            player = other.gameObject.GetComponent<Player>();
+            Debug.Log("Player Entered");
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D other) {
+        if(other.gameObject.layer == LayerMask.NameToLayer("Player"))
+        {
+            player = null;
         }
     }
 }
