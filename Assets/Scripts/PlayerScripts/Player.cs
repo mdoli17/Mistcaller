@@ -117,10 +117,10 @@ public class Player : MonoBehaviour
             if(interactable && playerState != PlayerState.INTERACTING)
             {
                 interactable.GetComponent<Interactable>().Interact();
-                playerState = PlayerState.INTERACTING;
+               
             }
-            else if(interactable && playerState == PlayerState.INTERACTING)
-                playerState = PlayerState.IDLE;
+            // else if(interactable && playerState == PlayerState.INTERACTING)
+                
         }
     }
 
@@ -129,12 +129,18 @@ public class Player : MonoBehaviour
 
         if(controller.collisions.above || controller.collisions.below)
         {
-            velocity.y = 0;
+            if(controller.collisions.slidingDownMaxSlope)
+            {
+                velocity.y += controller.collisions.slopeNormal.y * gravity * Time.deltaTime;
+            } 
+            else{
+                velocity.y = 0;
+            }
         }
 
         Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
   
-        if(bSpace && controller.collisions.below)
+        if(bSpace && controller.collisions.below && !controller.collisions.slidingDownMaxSlope)
         {
             velocity.y = jumpVelocity;
         }
@@ -202,4 +208,5 @@ public class Player : MonoBehaviour
         yield return new WaitForSeconds(time);
         bCanInteract = true;
     }
+
 }

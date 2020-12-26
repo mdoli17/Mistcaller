@@ -21,8 +21,11 @@ public class Lever : MonoBehaviour, Interactable
     {
         if(LeverInteractDelegate != null)
         {
-            LeverInteractDelegate();
-            player.SetPlayerState(PlayerState.IDLE);
+            if(player.GetPlayerState() == PlayerState.IDLE) {
+                LeverInteractDelegate();
+                player.SetPlayerState(PlayerState.INTERACTING);
+                StartCoroutine(ResetInteraction());
+            }
         }
     }
 
@@ -39,5 +42,14 @@ public class Lever : MonoBehaviour, Interactable
         {
             player = null;
         }
+    }
+
+    IEnumerator ResetInteraction() {
+        yield return new WaitForSeconds(1f);
+        player.SetPlayerState(PlayerState.IDLE);
+    }
+
+    private void OnDrawGizmos() {
+        
     }
 }

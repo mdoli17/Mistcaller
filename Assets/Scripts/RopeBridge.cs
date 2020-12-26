@@ -2,23 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// [RequireComponent (typeof(LineRenderer))]
-public class RopeScript : MonoBehaviour
+[RequireComponent (typeof(LineRenderer))]
+public class RopeBridge : MonoBehaviour
 {
-    public Lever lever;
     private LineRenderer lineRenderer;
     private List<RopeSegment> ropeSegments = new List<RopeSegment>();
     [SerializeField] private float ropeSegLen = 0.25f;
-    [SerializeField] private int segmentLength = 35;
+    private int segmentLength = 35;
     private float lineWidth = 0.1f;
 
-    [SerializeField] private int constraintAmmount;
+
     [SerializeField] private Transform startPoint;
-    [SerializeField] private GameObject hangedObject;
-    // Use this for initialization
+    [SerializeField] private Transform endPoint;
+
     void Start()
     {
-        lever.LeverInteractDelegate += LowerRope;
         this.lineRenderer = this.GetComponent<LineRenderer>();
         Vector3 ropeStartPoint = startPoint.position;
 
@@ -29,7 +27,6 @@ public class RopeScript : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
     void Update()
     {
         this.DrawRope();
@@ -47,21 +44,19 @@ public class RopeScript : MonoBehaviour
 
         for (int i = 1; i < this.segmentLength; i++)
         {
-            RopeSegment curSegment = this.ropeSegments[i];
-            Vector2 velocity = curSegment.posNow - curSegment.posOld;
-            curSegment.posOld = curSegment.posNow;
-            curSegment.posNow += velocity;
-            curSegment.posNow += forceGravity * Time.fixedDeltaTime;
-            this.ropeSegments[i] = curSegment;
+            RopeSegment firstSegment = this.ropeSegments[i];
+            Vector2 velocity = firstSegment.posNow - firstSegment.posOld;
+            firstSegment.posOld = firstSegment.posNow;
+            firstSegment.posNow += velocity;
+            firstSegment.posNow += forceGravity * Time.fixedDeltaTime;
+            this.ropeSegments[i] = firstSegment;
         }
 
         //CONSTRAINTS
-        for (int i = 0; i < constraintAmmount; i++)
+        for (int i = 0; i < 150; i++)
         {
             this.ApplyConstraint();
         }
-
-        hangedObject.transform.position = ropeSegments[this.segmentLength - 1].posNow;
     }
 
     private void ApplyConstraint()
@@ -70,6 +65,10 @@ public class RopeScript : MonoBehaviour
         RopeSegment firstSegment = this.ropeSegments[0];
         firstSegment.posNow = startPoint.position;
         this.ropeSegments[0] = firstSegment;
+
+        RopeSegment lastSegment = this.ropeSegments[segmentLength - 1];
+        lastSegment.posNow = endPoint.position;
+        this.ropeSegments[segmentLength - 1] = lastSegment;
 
         for (int i = 0; i < this.segmentLength - 1; i++)
         {
@@ -134,20 +133,7 @@ public class RopeScript : MonoBehaviour
 
     private void OnDrawGizmos() {
         Gizmos.DrawSphere(startPoint.position, 0.5f);
+        Gizmos.DrawSphere(endPoint.position, 0.5f);
     }
-
-
-    void LowerRope() {
-        Debug.Log("Lowering Rope");
-        StartCoroutine(ELowerRope());
-    }
-
-    IEnumerator ELowerRope() {
-        for(int i = 0; i < 80; i++)
-        {
-            ropeSegLen += 0.01f;
-            yield return new WaitForSeconds(0.1f);
-        }
-    }
-}   
+}
 
