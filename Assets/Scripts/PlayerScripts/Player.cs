@@ -46,6 +46,7 @@ public class Player : MonoBehaviour
 
     private void OnDrawGizmos() {
         Handles.Label(transform.position + new Vector3(0, 5, 0), playerState.ToString());
+        Handles.Label(transform.position + new Vector3(5,0,0),  controller.collisions.slidingDownMaxSlope.ToString());
     }
 
 
@@ -131,7 +132,7 @@ public class Player : MonoBehaviour
         {
             if(controller.collisions.slidingDownMaxSlope)
             {
-                velocity.y += controller.collisions.slopeNormal.y * gravity * Time.deltaTime;
+                velocity.y += controller.collisions.slopeNormal.y * -gravity * Time.deltaTime;
             } 
             else{
                 velocity.y = 0;
