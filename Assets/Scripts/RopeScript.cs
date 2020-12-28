@@ -5,7 +5,7 @@ using UnityEngine;
 // [RequireComponent (typeof(LineRenderer))]
 public class RopeScript : MonoBehaviour
 {
-    public Lever lever;
+    
     private LineRenderer lineRenderer;
     private List<RopeSegment> ropeSegments = new List<RopeSegment>();
     [SerializeField] private float ropeSegLen = 0.25f;
@@ -14,11 +14,14 @@ public class RopeScript : MonoBehaviour
 
     [SerializeField] private int constraintAmmount;
     [SerializeField] private Transform startPoint;
-    [SerializeField] private GameObject hangedObject;
+    
+    bool bPlayerIsOnRope = true;
+    [SerializeField] Transform playerStartObject;
+    [SerializeField] GameObject player;
+    int objIndex;
     // Use this for initialization
     void Start()
     {
-        lever.LeverInteractDelegate += LowerRope;
         this.lineRenderer = this.GetComponent<LineRenderer>();
         Vector3 ropeStartPoint = startPoint.position;
 
@@ -28,11 +31,54 @@ public class RopeScript : MonoBehaviour
             ropeStartPoint.y -= ropeSegLen;
         }
     }
-
+    float globalDif;
     // Update is called once per frame
     void Update()
     {
         this.DrawRope();
+        if(Input.GetKeyDown(KeyCode.Space)) {
+            bPlayerIsOnRope = false;
+        }
+        if(Input.GetKey(KeyCode.W)) {
+            playerStartObject.Translate(0,0.1f,0);
+            
+        }
+        else if (Input.GetKey(KeyCode.S)) {
+            playerStartObject.Translate(0,-0.1f,0);
+        }
+
+        if(bPlayerIsOnRope) {
+            // Check on which index is the player hanging
+            float startY = startPoint.position.y;
+            float startX = startPoint.position.x;
+
+            float endY = startY + segmentLength * ropeSegLen;
+
+            float objY = playerStartObject.position.y;
+            float objX = playerStartObject.position.x;
+
+            float difY = Mathf.Abs(startY - objY);
+            float difX = Mathf.Abs(startX - objX);
+
+            float diff = Mathf.Sqrt(difY * difY + difX * difX);
+            globalDif = difY;
+            float ratio = diff / Mathf.Abs(startY - endY);
+            objIndex = (int) (segmentLength * ratio);
+        
+            if(Input.GetKey(KeyCode.A)) {
+                RopeSegment last = ropeSegments[objIndex];
+                last.posOld = last.posNow;
+                last.posNow += new Vector2(-0.1f,0);
+                ropeSegments[objIndex] = last;
+            } else if(Input.GetKey(KeyCode.D)) {
+                RopeSegment last = ropeSegments[objIndex];
+                last.posOld = last.posNow;
+                last.posNow += new Vector2(0.1f,0);
+                ropeSegments[objIndex] = last;
+            }
+            player.transform.position = ropeSegments[objIndex - 1].posNow;
+        }
+        
     }
 
     private void FixedUpdate()
@@ -61,12 +107,12 @@ public class RopeScript : MonoBehaviour
             this.ApplyConstraint();
         }
 
-        hangedObject.transform.position = ropeSegments[this.segmentLength - 1].posNow;
+        
     }
 
     private void ApplyConstraint()
     {
-        //Constrant to Mouse
+       
         RopeSegment firstSegment = this.ropeSegments[0];
         firstSegment.posNow = startPoint.position;
         this.ropeSegments[0] = firstSegment;
@@ -134,6 +180,9 @@ public class RopeScript : MonoBehaviour
 
     private void OnDrawGizmos() {
         Gizmos.DrawSphere(startPoint.position, 0.5f);
+        Gizmos.color = Color.red;
+        Gizmos.DrawSphere(startPoint.position - new Vector3(0f, globalDif,0), 0.1f);
+        
     }
 
 
@@ -149,5 +198,7 @@ public class RopeScript : MonoBehaviour
             yield return new WaitForSeconds(0.1f);
         }
     }
+
+
 }   
 
