@@ -11,6 +11,7 @@ public enum PlayerState
     IDLE,
     INTERACTING,
     MOVING,
+    ONROPE
 }
 
 [RequireComponent (typeof (Controller2D))]
@@ -46,7 +47,6 @@ public class Player : MonoBehaviour
 
     private void OnDrawGizmos() {
         Handles.Label(transform.position + new Vector3(0, 5, 0), playerState.ToString());
-        Handles.Label(transform.position + new Vector3(5,0,0),  controller.collisions.slidingDownMaxSlope.ToString());
     }
 
 
@@ -90,7 +90,7 @@ public class Player : MonoBehaviour
         }
 
         Vector3 characterScale = transform.localScale;
-        if(playerState != PlayerState.INTERACTING)
+        if(playerState != PlayerState.INTERACTING && playerState != PlayerState.ONROPE)
         {
             if (Input.GetAxisRaw("Horizontal") < 0)
                 characterScale.x = Mathf.Abs(transform.localScale.x) * -1;
@@ -119,9 +119,7 @@ public class Player : MonoBehaviour
             {
                 interactable.GetComponent<Interactable>().Interact();
                
-            }
-            // else if(interactable && playerState == PlayerState.INTERACTING)
-                
+            }   
         }
     }
 
@@ -150,27 +148,25 @@ public class Player : MonoBehaviour
         velocity.x = Mathf.SmoothDamp(velocity.x, targetVelocityX, ref velocityXSmoothing, (controller.collisions.below) ? accelerationTimeGrounded : accelerationTimeAirbourne); 
         velocity.y += gravity * Time.deltaTime;
         
-        if(playerState != PlayerState.INTERACTING)
+        if(playerState != PlayerState.INTERACTING && playerState != PlayerState.ONROPE)
         {
             controller.Move(velocity * Time.deltaTime);
         }
         
         if(input.x == 0)
         {
-            if(playerState != PlayerState.IDLE  && playerState != PlayerState.INTERACTING)
+            if(playerState != PlayerState.IDLE  && playerState != PlayerState.INTERACTING && playerState != PlayerState.ONROPE)
             {
                 playerState = PlayerState.IDLE;
             }
         }
         else
         {
-            if(playerState != PlayerState.MOVING  && playerState != PlayerState.INTERACTING)
+            if(playerState != PlayerState.MOVING  && playerState != PlayerState.INTERACTING && playerState != PlayerState.ONROPE)
             {
                 playerState = PlayerState.MOVING;
             }
         }
-
-        Debug.Log(targetVelocityX);
     }
 
     void CalculateGravityAndVelocity()
@@ -208,6 +204,15 @@ public class Player : MonoBehaviour
     {
         yield return new WaitForSeconds(time);
         bCanInteract = true;
+    }
+
+    public void LaunchCharacter(Vector2 direction, bool overrideVelocity) {
+        Vector3 newDir = new Vector3(direction.x, direction.y, 0) * jumpVelocity;
+        velocity = overrideVelocity ? newDir : velocity + newDir;
+    }
+
+    public void ResetVelocity() {
+        velocity = Vector2.zero;
     }
 
 }

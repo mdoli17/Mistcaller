@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7097214663979358393}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 97.32, y: 92.4, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7097214664511397293}
@@ -172,6 +172,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfb76c08324bc514cbcd0d2f5d2ccacb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  constraintAmmount: 500
+  ropeHangingMask:
+    serializedVersion: 2
+    m_Bits: 1048576
+  ropeSegLen: 0.25
+  segmentLength: 35
+  lineWidth: 0.1
+  constraintAmmount: 100
   startPoint: {fileID: 7097214663979358398}
-  hangedObject: {fileID: 0}

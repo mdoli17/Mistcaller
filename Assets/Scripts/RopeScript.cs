@@ -5,23 +5,25 @@ using UnityEngine;
 // [RequireComponent (typeof(LineRenderer))]
 public class RopeScript : MonoBehaviour
 {
-    
+    public LayerMask ropeHangingMask;
     private LineRenderer lineRenderer;
     private List<RopeSegment> ropeSegments = new List<RopeSegment>();
     [SerializeField] private float ropeSegLen = 0.25f;
     [SerializeField] private int segmentLength = 35;
-    private float lineWidth = 0.1f;
+    public float lineWidth = 0.1f;
 
     [SerializeField] private int constraintAmmount;
     [SerializeField] private Transform startPoint;
     
-    bool bPlayerIsOnRope = true;
-    [SerializeField] Transform playerStartObject;
-    [SerializeField] GameObject player;
+    bool bPlayerIsOnRope = false;
+    Transform PlayerStartTransform;
+    Player player;
     int objIndex;
     // Use this for initialization
     void Start()
     {
+        PlayerStartTransform = new GameObject().transform;
+        PlayerStartTransform.parent = gameObject.transform;
         this.lineRenderer = this.GetComponent<LineRenderer>();
         Vector3 ropeStartPoint = startPoint.position;
 
@@ -36,57 +38,25 @@ public class RopeScript : MonoBehaviour
     void Update()
     {
         this.DrawRope();
-        if(Input.GetKeyDown(KeyCode.Space)) {
-            bPlayerIsOnRope = false;
-        }
-        if(Input.GetKey(KeyCode.W)) {
-            playerStartObject.Translate(0,0.1f,0);
-            
-        }
-        else if (Input.GetKey(KeyCode.S)) {
-            playerStartObject.Translate(0,-0.1f,0);
-        }
-
-        if(bPlayerIsOnRope) {
-            // Check on which index is the player hanging
-            float startY = startPoint.position.y;
-            float startX = startPoint.position.x;
-
-            float endY = startY + segmentLength * ropeSegLen;
-
-            float objY = playerStartObject.position.y;
-            float objX = playerStartObject.position.x;
-
-            float difY = Mathf.Abs(startY - objY);
-            float difX = Mathf.Abs(startX - objX);
-
-            float diff = Mathf.Sqrt(difY * difY + difX * difX);
-            globalDif = difY;
-            float ratio = diff / Mathf.Abs(startY - endY);
-            objIndex = (int) (segmentLength * ratio);
         
-            if(Input.GetKey(KeyCode.A)) {
-                RopeSegment last = ropeSegments[objIndex];
-                last.posOld = last.posNow;
-                last.posNow += new Vector2(-0.1f,0);
-                ropeSegments[objIndex] = last;
-            } else if(Input.GetKey(KeyCode.D)) {
-                RopeSegment last = ropeSegments[objIndex];
-                last.posOld = last.posNow;
-                last.posNow += new Vector2(0.1f,0);
-                ropeSegments[objIndex] = last;
-            }
-            player.transform.position = ropeSegments[objIndex - 1].posNow;
+        if(player) {
+            SimulatePlayerOnRope();
         }
+        
         
     }
 
     private void FixedUpdate()
     {
-        this.Simulate();
+        this.SimulateRope();
     }
-
-    private void Simulate()
+    private void RemovePlayerFromRope(Vector2 launchDirection) {
+        player.SetPlayerState(PlayerState.IDLE);
+        player.LaunchCharacter(launchDirection, true);
+        player = null;
+        StartCoroutine(resetRope());
+    }
+    private void SimulateRope()
     {
         // SIMULATION
         Vector2 forceGravity = new Vector2(0f, -1.5f);
@@ -106,13 +76,63 @@ public class RopeScript : MonoBehaviour
         {
             this.ApplyConstraint();
         }
+    }
 
+    private void SimulatePlayerOnRope() {
+        float playerXInput = Input.GetAxis("Horizontal");
+        if(Input.GetKeyDown(KeyCode.Space)) {
+            RemovePlayerFromRope(new Vector2(playerXInput,1));
+        }
         
+        if(Input.GetKey(KeyCode.W)) {
+            float difY = startPoint.position.y - PlayerStartTransform.position.y;
+            if(difY > 1)
+                PlayerStartTransform.Translate(0,0.1f,0);            
+        }
+        else if (Input.GetKey(KeyCode.S)) {
+            float difY = PlayerStartTransform.position.y - (startPoint.position.y - segmentLength * ropeSegLen);
+            if(difY > 1) 
+                PlayerStartTransform.Translate(0,-0.1f,0);
+            else {
+                RemovePlayerFromRope(new Vector2(0,0));
+            }
+        }                
+
+        if(player.GetPlayerState() == PlayerState.ONROPE) {
+            // Check on which index is the player hanging
+            float startY = startPoint.position.y;
+            float startX = startPoint.position.x;
+
+            float endY = startY + segmentLength * ropeSegLen;
+
+            float objY = PlayerStartTransform.position.y;
+            float objX = PlayerStartTransform.position.x;
+
+            float difY = Mathf.Abs(startY - objY);
+            float difX = Mathf.Abs(startX - objX);
+
+            float diff = Mathf.Sqrt(difY * difY + difX * difX);
+            
+            float ratio = diff / Mathf.Abs(startY - endY);
+            objIndex = (int) (segmentLength * ratio);
+            globalDif = difY;
+            if(Input.GetKey(KeyCode.A)) {
+                RopeSegment last = ropeSegments[objIndex];
+                last.posOld = last.posNow;
+                last.posNow += new Vector2(-0.1f,0);
+                ropeSegments[objIndex] = last;
+            } else if(Input.GetKey(KeyCode.D)) {
+                RopeSegment last = ropeSegments[objIndex];
+                last.posOld = last.posNow;
+                last.posNow += new Vector2(0.1f,0);
+                ropeSegments[objIndex] = last;
+            }
+            player.gameObject.transform.position = ropeSegments[objIndex - 1].posNow;
+        }
     }
 
     private void ApplyConstraint()
     {
-       
         RopeSegment firstSegment = this.ropeSegments[0];
         firstSegment.posNow = startPoint.position;
         this.ropeSegments[0] = firstSegment;
@@ -160,6 +180,36 @@ public class RopeScript : MonoBehaviour
         for (int i = 0; i < this.segmentLength; i++)
         {
             ropePositions[i] = this.ropeSegments[i].posNow;
+            if(!bPlayerIsOnRope) {
+                if (i != segmentLength - 1) {
+                    Vector2 direction = (ropeSegments[i].posNow - ropeSegments[i + 1].posNow);
+                    RaycastHit2D hit = Physics2D.Raycast(ropeSegments[i].posNow, direction , ropeSegLen, ropeHangingMask);
+                    Debug.DrawRay(ropeSegments[i].posNow, direction, Color.red);
+
+                    if(hit) {
+                        player = hit.transform.gameObject.GetComponent<Player>();
+                        PlayerStartTransform.position = player.gameObject.transform.position;
+                        player.SetPlayerState(PlayerState.ONROPE);
+
+                        RopeSegment hitSegment = ropeSegments[i];
+                        hitSegment.posOld = hitSegment.posNow;
+                        hitSegment.posNow += new Vector2(player.getVelocity().x / 15, 0f);
+                        ropeSegments[i] = hitSegment;
+
+                        RopeSegment hitSegment1 = ropeSegments[i + 1];
+                        hitSegment1.posOld = hitSegment1.posNow;
+                        hitSegment1.posNow += new Vector2(player.getVelocity().x / 15, 0f);
+                        ropeSegments[i + 1] = hitSegment1;
+
+                        RopeSegment hitSegment2 = ropeSegments[i - 1];
+                        hitSegment2.posOld = hitSegment2.posNow;
+                        hitSegment2.posNow += new Vector2(player.getVelocity().x / 15, 0f);
+                        ropeSegments[i - 1] = hitSegment2;
+
+                        bPlayerIsOnRope = true;
+                    }
+                }
+            }
         }
 
         lineRenderer.positionCount = ropePositions.Length;
@@ -197,6 +247,11 @@ public class RopeScript : MonoBehaviour
             ropeSegLen += 0.01f;
             yield return new WaitForSeconds(0.1f);
         }
+    }
+
+    IEnumerator resetRope() {
+        yield return new WaitForSeconds(0.5f);
+        bPlayerIsOnRope = false;
     }
 
 
