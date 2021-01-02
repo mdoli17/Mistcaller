@@ -47,6 +47,7 @@ public class Player : MonoBehaviour
 
     private void OnDrawGizmos() {
         Handles.Label(transform.position + new Vector3(0, 5, 0), playerState.ToString());
+        Gizmos.DrawLine(transform.position, transform.position + velocity.normalized);
     }
 
 
@@ -145,7 +146,9 @@ public class Player : MonoBehaviour
         }
 
         float targetVelocityX = input.x * moveSpeed * grabSlow;
-        velocity.x = Mathf.SmoothDamp(velocity.x, targetVelocityX, ref velocityXSmoothing, (controller.collisions.below) ? accelerationTimeGrounded : accelerationTimeAirbourne); 
+        if(controller.collisions.below)
+            velocity.x = Mathf.SmoothDamp(velocity.x, targetVelocityX, ref velocityXSmoothing, (controller.collisions.below) ? accelerationTimeGrounded : accelerationTimeAirbourne); 
+    
         velocity.y += gravity * Time.deltaTime;
         
         if(playerState != PlayerState.INTERACTING && playerState != PlayerState.ONROPE)

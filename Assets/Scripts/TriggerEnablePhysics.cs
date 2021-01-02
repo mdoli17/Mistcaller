@@ -41,7 +41,7 @@ public class TriggerEnablePhysics : MonoBehaviour
                 foreach(GameObject o in objects)
                 {
                     o.GetComponent<Rigidbody2D>().isKinematic = false;
-                    o.GetComponent<Rigidbody2D>().mass = 10;
+                    o.GetComponent<Rigidbody2D>().mass = 40;
                 }
             }
         }
