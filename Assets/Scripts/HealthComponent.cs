@@ -40,14 +40,14 @@ public class HealthComponent : MonoBehaviour
 
     IEnumerator Respawn()
     {
-        GetComponent<Controller>().enabled = false;
+        GetComponent<Controller2D>().enabled = false;
         
         yield return new WaitForSeconds(RespawnTime);
         
         transform.position = SpawnPointManager.getLastSpawnPoint();
         CurrentHealth = MaxHealth;
 
-        GetComponent<Controller>().enabled = true;
+        GetComponent<Controller2D>().enabled = true;
 
     }
     

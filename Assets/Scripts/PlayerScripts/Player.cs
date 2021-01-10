@@ -44,14 +44,10 @@ public class Player : MonoBehaviour
     
     private bool bCanInteract;
 
-
     private void OnDrawGizmos() {
         Handles.Label(transform.position + new Vector3(0, 5, 0), playerState.ToString());
         Gizmos.DrawLine(transform.position, transform.position + velocity.normalized);
     }
-
-
-
 
     // Start is called before the first frame update
     void Start()
@@ -63,8 +59,6 @@ public class Player : MonoBehaviour
         playerAnimator = GetComponentInChildren<Animator>();
         grabSlow = 1;
     }
-
-    
 
     private bool bSpace;
     void Update()
@@ -176,6 +170,7 @@ public class Player : MonoBehaviour
     {
         gravity = - (2 * jumpHeight) / (timeToJump * timeToJump);
         jumpVelocity = Mathf.Abs(gravity) * timeToJump;
+        
     }
 
     public Vector3 getVelocity()
@@ -217,5 +212,4 @@ public class Player : MonoBehaviour
     public void ResetVelocity() {
         velocity = Vector2.zero;
     }
-
 }

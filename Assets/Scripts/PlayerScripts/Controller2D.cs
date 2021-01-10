@@ -5,29 +5,16 @@ using UnityEngine;
 
 
 [RequireComponent (typeof (BoxCollider2D))]
-public class Controller2D : MonoBehaviour
+public class Controller2D : RaycastController
 {
 
-    public LayerMask collisionMask;
-    const float skinWidth = .015f;
-    
-
-    public int horizontalRayCount = 4;
-    public int verticalRayCount = 4;
-
     public float maxSlopeAngle = 80;
-
-    float horizontalRaySpacing, verticalRaySpacing;
-
-    BoxCollider2D collider;
-
-    RaycastOrigins origins;
 
     public CollisionInfo collisions;
     void Start()
     {
-        collider = GetComponent<BoxCollider2D>();
-        CalculateRaySpacing();
+        base.Start();
+        collider = GetComponent<BoxCollider2D>();   
     }
 
     void horizontalCollisions(ref Vector3 velocity)
@@ -194,8 +181,8 @@ public class Controller2D : MonoBehaviour
     }
     public void Move(Vector3 velocity)
     {
+        UpdateRaycastOrigins();
         collisions.Reset();
-        updateRaycastOrigins();
         collisions.velocityOld = velocity;
 
         if(velocity.y < 0)
@@ -211,33 +198,6 @@ public class Controller2D : MonoBehaviour
             verticalCollisions(ref velocity);
         }
         transform.Translate(velocity);
-    }
-
-    void updateRaycastOrigins()
-    {
-        Bounds boxBounds = collider.bounds;
-        boxBounds.Expand(skinWidth * -2);
-        origins.botLeft = new Vector2(boxBounds.min.x, boxBounds.min.y);    
-        origins.botRight = new Vector2(boxBounds.max.x, boxBounds.min.y);
-        origins.topLeft = new Vector2(boxBounds.min.x, boxBounds.max.y);
-        origins.topRight = new Vector2(boxBounds.max.x, boxBounds.max.y);
-    }
-
-    void CalculateRaySpacing()
-    {
-        Bounds boxBounds = collider.bounds;
-        boxBounds.Expand(skinWidth * -2);
-    
-        horizontalRayCount = Mathf.Clamp(horizontalRayCount, 2, int.MaxValue);
-        verticalRayCount = Mathf.Clamp(verticalRayCount, 2, int.MaxValue);
-
-        horizontalRaySpacing = boxBounds.size.y / (horizontalRayCount - 1);
-        verticalRaySpacing = boxBounds.size.x / (verticalRayCount - 1);
-    }
-
-    struct RaycastOrigins
-    {
-        public Vector2 topLeft, topRight, botLeft, botRight;
     }
 
     public struct CollisionInfo

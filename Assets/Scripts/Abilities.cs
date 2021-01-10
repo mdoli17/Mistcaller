@@ -7,14 +7,14 @@ public static class Abilities
 
     
 
-    public static void MistyJump(Controller MistController)
-    {
-        if(MistController.bCanDetectMist() && MistController.MistyJumpsAvailable())
-        {
-            MistController.MistyBody.velocity = new Vector2(MistController.MistyBody.velocity.x, MistController.JumpForce / 50);
-            MistController.UseMistyJump();
-        }
-    }
+    // public static void MistyJump(Controller MistController)
+    // {
+    //     if(MistController.bCanDetectMist() && MistController.MistyJumpsAvailable())
+    //     {
+    //         MistController.MistyBody.velocity = new Vector2(MistController.MistyBody.velocity.x, MistController.JumpForce / 50);
+    //         MistController.UseMistyJump();
+    //     }
+    // }
 
     public static GameObject Hook()
     {
@@ -80,21 +80,21 @@ public static class Abilities
 
     private static void HookEnemy(GameObject TargetObject, GameObject StartObject, Vector3 StartPosition)
     {
-        Debug.Log("Enemy Detected");
+        // Debug.Log("Enemy Detected");
 
-        Rigidbody2D TargetBody = TargetObject.GetComponent<Rigidbody2D>();
-        if(TargetBody)
-        {
-            TargetBody.gravityScale = 0;
-            Vector2 Direction = (StartObject.transform.position - TargetObject.transform.position).normalized;
-            TargetObject.GetComponent<EnemyScript>().SetGotHooked(StartPosition);
-            TargetBody.AddForce(Direction * 1000);
+        // Rigidbody2D TargetBody = TargetObject.GetComponent<Rigidbody2D>();
+        // if(TargetBody)
+        // {
+        //     TargetBody.gravityScale = 0;
+        //     Vector2 Direction = (StartObject.transform.position - TargetObject.transform.position).normalized;
+        //     TargetObject.GetComponent<EnemyScript>().SetGotHooked(StartPosition);
+        //     TargetBody.AddForce(Direction * 1000);
 
-        }
-        else
-        {
-            Debug.Log("No RigidBody2D Detected");
-        }
+        // }
+        // else
+        // {
+        //     Debug.Log("No RigidBody2D Detected");
+        // }
     }
 
     public static bool CanDetectMist()

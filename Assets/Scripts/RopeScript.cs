@@ -42,8 +42,6 @@ public class RopeScript : MonoBehaviour
         if(player) {
             SimulatePlayerOnRope();
         }
-        
-        
     }
 
     private void FixedUpdate()
@@ -116,15 +114,19 @@ public class RopeScript : MonoBehaviour
             float ratio = diff / Mathf.Abs(startY - endY);
             objIndex = (int) (segmentLength * ratio);
             globalDif = difY;
+
+            // TODO: Adding Force should be restricted
+            float friction = Mathf.Abs((player.transform.position - startPoint.position).normalized.x);
+            Debug.Log(friction);
             if(Input.GetKey(KeyCode.A)) {
                 RopeSegment last = ropeSegments[objIndex];
                 last.posOld = last.posNow;
-                last.posNow += new Vector2(-0.1f,0);
+                last.posNow += new Vector2(-10f,0) * Time.deltaTime;
                 ropeSegments[objIndex] = last;
             } else if(Input.GetKey(KeyCode.D)) {
                 RopeSegment last = ropeSegments[objIndex];
                 last.posOld = last.posNow;
-                last.posNow += new Vector2(0.1f,0);
+                last.posNow += new Vector2(10f,0) * Time.deltaTime;
                 ropeSegments[objIndex] = last;
             }
             player.gameObject.transform.position = ropeSegments[objIndex - 1].posNow;
@@ -195,16 +197,18 @@ public class RopeScript : MonoBehaviour
                         hitSegment.posOld = hitSegment.posNow;
                         hitSegment.posNow += new Vector2(player.getVelocity().x / 15, 0f);
                         ropeSegments[i] = hitSegment;
-
-                        RopeSegment hitSegment1 = ropeSegments[i + 1];
-                        hitSegment1.posOld = hitSegment1.posNow;
-                        hitSegment1.posNow += new Vector2(player.getVelocity().x / 15, 0f);
-                        ropeSegments[i + 1] = hitSegment1;
-
+                        
                         RopeSegment hitSegment2 = ropeSegments[i - 1];
                         hitSegment2.posOld = hitSegment2.posNow;
                         hitSegment2.posNow += new Vector2(player.getVelocity().x / 15, 0f);
                         ropeSegments[i - 1] = hitSegment2;
+
+                        if (i + 1 <= segmentLength - 1) {
+                            RopeSegment hitSegment1 = ropeSegments[i + 1];
+                            hitSegment1.posOld = hitSegment1.posNow;
+                            hitSegment1.posNow += new Vector2(player.getVelocity().x / 15, 0f);
+                            ropeSegments[i + 1] = hitSegment1;
+                        }
 
                         bPlayerIsOnRope = true;
                     }
