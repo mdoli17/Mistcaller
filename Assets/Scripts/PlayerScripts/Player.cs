@@ -28,6 +28,9 @@ public class Player : MonoBehaviour
     public float accelerationTimeAirbourne =.5f;
     public float accelerationTimeGrounded = .1f;
 
+
+    public float mass;
+    
     Controller2D controller;
     Vector3 velocity;
 
@@ -43,7 +46,7 @@ public class Player : MonoBehaviour
     private PlayerState playerState;
     
     private bool bCanInteract;
-
+Vector2 input;
     private void OnDrawGizmos() {
         Handles.Label(transform.position + new Vector3(0, 5, 0), playerState.ToString());
         Gizmos.DrawLine(transform.position, transform.position + velocity.normalized);
@@ -116,6 +119,8 @@ public class Player : MonoBehaviour
                
             }   
         }
+
+        
     }
 
     void FixedUpdate()
@@ -128,11 +133,12 @@ public class Player : MonoBehaviour
                 velocity.y += controller.collisions.slopeNormal.y * -gravity * Time.deltaTime;
             } 
             else{
+
                 velocity.y = 0;
             }
         }
-
-        Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+    
+         input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
   
         if(bSpace && controller.collisions.below && !controller.collisions.slidingDownMaxSlope)
         {
@@ -149,7 +155,6 @@ public class Player : MonoBehaviour
         {
             controller.Move(velocity * Time.deltaTime);
         }
-        
         if(input.x == 0)
         {
             if(playerState != PlayerState.IDLE  && playerState != PlayerState.INTERACTING && playerState != PlayerState.ONROPE)

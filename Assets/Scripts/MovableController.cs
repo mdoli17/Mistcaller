@@ -17,6 +17,7 @@ public class MovableController : RaycastController
     }
 
     private void Update() {
+        velocity.y += gravity * Time.deltaTime;
         if(collisions.above || collisions.below)
         {
             if(collisions.slidingDownMaxSlope)
@@ -28,7 +29,6 @@ public class MovableController : RaycastController
             }
         }
 
-        velocity.y += gravity * Time.deltaTime;
         Move(velocity * Time.deltaTime);
     }
 
@@ -154,13 +154,14 @@ public class MovableController : RaycastController
     void verticalCollisions(ref Vector3 velocity)
     {
         float directionY = Mathf.Sign(velocity.y);
-        float rayLength = Mathf.Abs(velocity.y) + skinWidth;
+        float rayLength = Mathf.Abs(collisions.velocityOld.y) + skinWidth;
         for(int i = 0; i < verticalRayCount; i++)
         {
             Vector2 rayOrigin = (directionY == -1) ? origins.botLeft : origins.topLeft;
             rayOrigin += Vector2.right * (verticalRaySpacing * i + velocity.x);
             RaycastHit2D hit = Physics2D.Raycast(rayOrigin, directionY * Vector2.up, rayLength, collisionMask);
             Debug.DrawRay(rayOrigin, Vector2.up * directionY * rayLength, Color.red);
+            
             if(hit)
             {
                 
@@ -171,8 +172,8 @@ public class MovableController : RaycastController
                     velocity.x = velocity.y / Mathf.Tan(collisions.slopeAngle * Mathf.Deg2Rad) * Mathf.Sign(velocity.x); 
                 }
 
-                collisions.below = directionY == -1;
-                collisions.above = directionY == 1;
+                collisions.below = (directionY == -1);
+                collisions.above = (directionY == 1);
                 
             }
         }
@@ -201,6 +202,7 @@ public class MovableController : RaycastController
 
         if(velocity.y < 0)
         {
+
             DescendSlope(ref velocity);
         }
         if(velocity.x != 0)

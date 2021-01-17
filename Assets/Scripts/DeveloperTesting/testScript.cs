@@ -6,39 +6,43 @@ public class testScript : MonoBehaviour
 {
     [Range(0,1)]
     public float MaxRotation;
-    public Player player;
     Vector3 velocity;   
-    public LayerMask mask;
-    BoxCollider2D collider;
+    public float speed;
+
+    SwingController controller;
     private void Start() {
-        collider = GetComponentsInChildren<BoxCollider2D>()[1];
+        controller = GetComponentInChildren<SwingController>();
+        
+        velocity = Vector3.zero;
     }
     private void Update() {
+        Debug.Log(controller.gameObject.name);
+        
         if(transform.rotation.z > MaxRotation || transform.rotation.z < -MaxRotation)
         {
+            Debug.Log("Reseting Z");
             velocity.z = 0;
         }
-        if(collider.IsTouchingLayers(mask))
-        {   
-            if(transform.rotation.z < MaxRotation && transform.rotation.z > -MaxRotation)
+
+        float force = controller.getRotationForce();
+        if(transform.rotation.z < MaxRotation && transform.rotation.z > -MaxRotation)
+        {
+            velocity.z += force;
+        }
+        else if(transform.rotation.z > MaxRotation)
+        {
+            if(force < 0)
             {
-                velocity.z += (transform.position.x - player.transform.position.x);
-            }
-            else if(transform.rotation.z > MaxRotation)
-            {
-                if(transform.position.x - player.transform.position.x < 0)
-                {
-                    velocity.z += (transform.position.x - player.transform.position.x);
-                }
-            }
-            else if(transform.rotation.z < -MaxRotation)
-            {
-                if(transform.position.x - player.transform.position.x > 0)
-                {
-                    velocity.z += (transform.position.x - player.transform.position.x);
-                }
+                velocity.z += force;
             }
         }
-        transform.Rotate(velocity * Time.deltaTime * 0.1f);
+        else if(transform.rotation.z < -MaxRotation)
+        {
+            if(force > 0)
+            {
+                velocity.z += force;
+            }
+        }
+        transform.Rotate(velocity * Time.deltaTime * speed);
     }
 }

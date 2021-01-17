@@ -117,7 +117,7 @@ public class RopeScript : MonoBehaviour
 
             // TODO: Adding Force should be restricted
             float friction = Mathf.Abs((player.transform.position - startPoint.position).normalized.x);
-            Debug.Log(friction);
+
             if(Input.GetKey(KeyCode.A)) {
                 RopeSegment last = ropeSegments[objIndex];
                 last.posOld = last.posNow;

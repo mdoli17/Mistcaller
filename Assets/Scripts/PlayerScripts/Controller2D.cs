@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,17 +19,26 @@ public class Controller2D : RaycastController
 
     void horizontalCollisions(ref Vector3 velocity)
     {
+        
         float directionX = Mathf.Sign(velocity.x);
         float rayLength = Mathf.Abs(velocity.x) + skinWidth;
+
+		if (Mathf.Abs(velocity.x) < skinWidth) {
+			rayLength = 2*skinWidth;
+		}
 
         for(int i = 0; i < horizontalRayCount; i++)
         {
             Vector2 rayOrigin = (directionX == -1) ? origins.botLeft : origins.botRight;
             rayOrigin += Vector2.up * (horizontalRaySpacing * i);
             RaycastHit2D hit = Physics2D.Raycast(rayOrigin, directionX * Vector2.right, rayLength, collisionMask);
-            Debug.DrawRay(rayOrigin, Vector2.right * directionX * rayLength, Color.red);
+            Debug.DrawRay(rayOrigin, Vector2.right * directionX, Color.red);
             if(hit)
             {
+				if (hit.distance == 0) {
+					continue;
+				}
+
                 float slopeAngle = Vector2.Angle(hit.normal, Vector2.up);
 
                 if(i == 0 && slopeAngle <= maxSlopeAngle)
@@ -81,20 +90,19 @@ public class Controller2D : RaycastController
         
     }
 
-    private void DescendSlope(ref Vector3 velocity)
+    private void DescendSlope(ref Vector3 moveAmmount)
     {
-        RaycastHit2D maxSlopeHitLeft = Physics2D.Raycast(origins.botLeft, Vector2.down, Mathf.Abs(velocity.y) + skinWidth, collisionMask);
-        RaycastHit2D maxSlopeHitRight = Physics2D.Raycast(origins.botRight, Vector2.down, Mathf.Abs(velocity.y) + skinWidth, collisionMask);
+        RaycastHit2D maxSlopeHitLeft = Physics2D.Raycast(origins.botLeft, Vector2.down, Mathf.Abs(moveAmmount.y) + skinWidth, collisionMask);
+        RaycastHit2D maxSlopeHitRight = Physics2D.Raycast(origins.botRight, Vector2.down, Mathf.Abs(moveAmmount.y) + skinWidth, collisionMask);
         if (maxSlopeHitLeft ^ maxSlopeHitRight) {
-            slideDownMaxSlope(maxSlopeHitLeft, ref velocity);
-            slideDownMaxSlope(maxSlopeHitRight, ref velocity);
+            slideDownMaxSlope(maxSlopeHitLeft, ref moveAmmount);
+            slideDownMaxSlope(maxSlopeHitRight, ref moveAmmount);
         }
 
         if(!collisions.slidingDownMaxSlope) {
-            float directionX = Mathf.Sign(velocity.x);
+            float directionX = Mathf.Sign(moveAmmount.x);
             Vector2 rayOrigin = (directionX == -1) ? origins.botRight : origins.botLeft;
             RaycastHit2D hit = Physics2D.Raycast(rayOrigin, -Vector2.up, Mathf.Infinity, collisionMask);
-            
             if(hit)
             {
                 float slopeAngle = Vector2.Angle(hit.normal, Vector2.up);
@@ -102,12 +110,12 @@ public class Controller2D : RaycastController
                 {
                     if(Mathf.Sign(hit.normal.x) == directionX)
                     {
-                        if (hit.distance - skinWidth <= Mathf.Tan(slopeAngle * Mathf.Deg2Rad) * Mathf.Abs(velocity.x))
+                        if (hit.distance - skinWidth <= Mathf.Tan(slopeAngle * Mathf.Deg2Rad) * Mathf.Abs(moveAmmount.x))
                         {
-                            float moveDistance = Mathf.Abs(velocity.x);
+                            float moveDistance = Mathf.Abs(moveAmmount.x);
                             float descendVelocityY = Mathf.Sin(slopeAngle * Mathf.Deg2Rad) * moveDistance;
-                            velocity.x = Mathf.Cos(slopeAngle * Mathf.Deg2Rad) * moveDistance * Mathf.Sign(velocity.x);
-                            velocity.y -= descendVelocityY;
+                            moveAmmount.x = Mathf.Cos(slopeAngle * Mathf.Deg2Rad) * moveDistance * Mathf.Sign(moveAmmount.x);
+                            moveAmmount.y -= descendVelocityY;
 
                             collisions.slopeAngle = slopeAngle;
                             collisions.descendingSlope = true;
@@ -187,12 +195,12 @@ public class Controller2D : RaycastController
 
         if(velocity.y < 0)
         {
+
             DescendSlope(ref velocity);
         }
-        if(velocity.x != 0)
-        {
-            horizontalCollisions(ref velocity);
-        }
+
+        horizontalCollisions(ref velocity);
+        
         if(velocity.y != 0)
         {
             verticalCollisions(ref velocity);
