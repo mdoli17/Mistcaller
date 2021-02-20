@@ -6,17 +6,21 @@ public class RollingBall : MonoBehaviour
 {
     public GameObject rollingObject;
     public Vector3 targetLocation;
+    private Vector3 startPosition;
     private Vector3 velocity = Vector3.zero;
     public float ballSpeed = 1;
     private float velocityXSmoothing;
     public float accelerationTimeGrounded = 0.5f;
     public float rotationSpeed;
+
+    private void Awake()
+    {
+        startPosition = transform.position;
+    }
     void OnTriggerStay2D(Collider2D other)
     {
-        Debug.Log(velocity);
         if(other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-
             Player playerController = other.gameObject.GetComponent<Player>();
             float direction = Mathf.Sign(playerController.getVelocity().x);
             if(playerController.getVelocity().x != 0)
@@ -31,7 +35,7 @@ public class RollingBall : MonoBehaviour
 
     void Update()
     {
-        if (transform.position.x < targetLocation.x)
+        if (transform.position.x < startPosition.x + targetLocation.x)
         {
             transform.parent.transform.Translate(velocity);
             rollingObject.transform.Rotate(new Vector3(0, 0, -1f * velocity.x * rotationSpeed));
@@ -40,7 +44,7 @@ public class RollingBall : MonoBehaviour
 
     void OnDrawGizmos()
     {
-        Gizmos.DrawSphere(targetLocation, 0.5f);
+        Gizmos.DrawSphere(transform.position + targetLocation, 0.5f);
     }
    
 }

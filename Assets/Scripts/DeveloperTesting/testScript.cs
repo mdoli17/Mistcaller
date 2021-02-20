@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class testScript : MonoBehaviour
+public class testScript : RaycastController
 {
     [Range(0,1)]
     public float MaxRotation;
@@ -11,16 +11,14 @@ public class testScript : MonoBehaviour
 
     SwingController controller;
     private void Start() {
+        base.Start();
         controller = GetComponentInChildren<SwingController>();
-        
         velocity = Vector3.zero;
     }
     private void Update() {
-        Debug.Log(controller.gameObject.name);
-        
+        UpdateRaycastOrigins();
         if(transform.rotation.z > MaxRotation || transform.rotation.z < -MaxRotation)
         {
-            Debug.Log("Reseting Z");
             velocity.z = 0;
         }
 
@@ -44,5 +42,17 @@ public class testScript : MonoBehaviour
             }
         }
         transform.Rotate(velocity * Time.deltaTime * speed);
+
+        MovePassengers();
+    }
+
+    private void MovePassengers() {
+        for(int i = 0; i < 15; i++)
+        {
+            Vector3 startposition = transform.position - new Vector3(collider.size.x * 5,0,0);
+            Debug.DrawRay(startposition, Vector3.up, Color.blue);
+
+            
+        }
     }
 }

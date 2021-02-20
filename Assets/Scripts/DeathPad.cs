@@ -21,8 +21,15 @@ public class DeathPad : MonoBehaviour
     {
         if(other.transform.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-            other.transform.gameObject.GetComponentInChildren<HealthComponent>().TakeDamage(150);
+            //other.transform.gameObject.GetComponentInChildren<HealthComponent>().TakeDamage(150);
+            StartCoroutine(ResetPlayer());
         }
     }
 
+    IEnumerator ResetPlayer()
+    {
+        yield return new WaitForSeconds(2);
+        SaveObject save = SaveManager.shared.ReadFromFile("Quicksave.txt");
+        gameObject.transform.position = save.PlayerPosition;
+    }
 }

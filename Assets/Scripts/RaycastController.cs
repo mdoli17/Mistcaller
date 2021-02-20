@@ -34,6 +34,7 @@ public class RaycastController : MonoBehaviour {
 		origins.botRight = new Vector2 (bounds.max.x, bounds.min.y);
 		origins.topLeft = new Vector2 (bounds.min.x, bounds.max.y);
 		origins.topRight = new Vector2 (bounds.max.x, bounds.max.y);
+
 	}
 	
 	public void CalculateRaySpacing() {
@@ -46,9 +47,14 @@ public class RaycastController : MonoBehaviour {
 		horizontalRaySpacing = bounds.size.y / (horizontalRayCount - 1);
 		verticalRaySpacing = bounds.size.x / (verticalRayCount - 1);
 	}
-	
+
+
 	public struct RaycastOrigins {
 		public Vector2 topLeft, topRight;
 		public Vector2 botLeft, botRight;
+	}
+
+	private void OnDrawGizmos() {
+		
 	}
 }

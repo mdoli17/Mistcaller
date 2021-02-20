@@ -7,7 +7,7 @@ using UnityEngine;
 [RequireComponent (typeof (BoxCollider2D))]
 public class Controller2D : RaycastController
 {
-
+    
     public float maxSlopeAngle = 80;
 
     public CollisionInfo collisions;

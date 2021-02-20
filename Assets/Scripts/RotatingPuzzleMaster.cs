@@ -5,6 +5,7 @@ using UnityEngine;
 public class RotatingPuzzleMaster : MonoBehaviour
 {
     public RotatingPuzzleObject[] objects;
+    public BoxCollider2D door;
 
     public int target;
 
@@ -21,6 +22,9 @@ public class RotatingPuzzleMaster : MonoBehaviour
 
     private void OnPuzzleSolve()
     {
-        Debug.Log("Puzzle Solved");
+        if (door)
+        {
+            door.enabled = false;
+        }
     }
 }

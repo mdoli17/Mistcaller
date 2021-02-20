@@ -17,7 +17,7 @@ public enum PlayerState
 [RequireComponent (typeof (Controller2D))]
 public class Player : MonoBehaviour
 {
-
+    private const string SAVE_FILENAME = "Quicksave.txt";
     public float moveSpeed = 6;
     public float jumpHeight;
     public float timeToJump;
@@ -61,6 +61,7 @@ Vector2 input;
         CalculateGravityAndVelocity();
         playerAnimator = GetComponentInChildren<Animator>();
         grabSlow = 1;
+        
     }
 
     private bool bSpace;
@@ -120,7 +121,21 @@ Vector2 input;
             }   
         }
 
-        
+        if(Input.GetKeyDown(KeyCode.F5))
+        {
+            SaveObject save = new SaveObject();
+            save.PlayerPosition = transform.position;
+
+            SaveManager.shared.WriteToFile(save, SAVE_FILENAME);
+            Debug.Log("Save Successful");
+        }
+        else if(Input.GetKeyDown(KeyCode.F9))
+        {
+            SaveObject save = SaveManager.shared.ReadFromFile(SAVE_FILENAME);
+            gameObject.transform.position = save.PlayerPosition;
+
+            Debug.Log("Load Successful");
+        }
     }
 
     void FixedUpdate()
@@ -216,5 +231,10 @@ Vector2 input;
 
     public void ResetVelocity() {
         velocity = Vector2.zero;
+    }
+
+    public void Die()
+    {
+        GameManager.shared.ResetLevel();
     }
 }

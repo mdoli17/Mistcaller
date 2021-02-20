@@ -7,13 +7,12 @@ public class FadeOut : MonoBehaviour
     // Start is called before the first frame update
 
     public SpriteRenderer[] FadeRenderers;
-    public SpriteRenderer[] DarkenRenderers;
+    public SpriteRenderer[] DarkSingleRenderers;
+    public GameObject[] DarkenFamilyRenderers;
 
     
     [Range(0,1)]
     public float darkAmmount;    
-
-    private bool darken;
 
     public float fadeTime;
 
@@ -37,8 +36,8 @@ public class FadeOut : MonoBehaviour
         {
              
             StopAllCoroutines();
-            StartCoroutine(Darken());
-            
+            StartCoroutine(DarkenSingle());
+            StartCoroutine(DarkenFamily());
             StartCoroutine(FadeIn());
         }
     }
@@ -50,8 +49,8 @@ public class FadeOut : MonoBehaviour
         {
             StopAllCoroutines();
             
-            StartCoroutine(Lighten());
-        
+            StartCoroutine(LightenSingle());
+            StartCoroutine(LightenFamily());
             StartCoroutine(Fadeout());
         }
     }
@@ -98,14 +97,14 @@ public class FadeOut : MonoBehaviour
     }
 
 
-    IEnumerator Darken()
+    IEnumerator DarkenSingle()
     {
         Debug.Log("Darken");
         float t = 0f;
         while(t < fadeTime)
         {
             t += Time.deltaTime;
-            foreach (var item in DarkenRenderers)
+            foreach (var item in DarkSingleRenderers)
             {
                 Color color = item.color;
                 float value =  Mathf.Lerp(color.r, darkAmmount, t / fadeTime);
@@ -116,13 +115,13 @@ public class FadeOut : MonoBehaviour
         }
     }
 
-    IEnumerator Lighten()
+    IEnumerator LightenSingle()
     {
         float t = 0f;
         while(t < fadeTime)
         {
             t += Time.deltaTime;
-            foreach (var item in DarkenRenderers)
+            foreach (var item in DarkSingleRenderers)
             {
                 Color color = item.color;
                 float value =  Mathf.Lerp(color.r, 1, t / fadeTime);
@@ -132,13 +131,44 @@ public class FadeOut : MonoBehaviour
         }
     }
 
-    public void setDarken()
+    IEnumerator DarkenFamily()
     {
-        darken = true;
+        float t = 0f;
+        while (t < fadeTime)
+        {
+            foreach (var child in DarkenFamilyRenderers)
+            {
+                SpriteRenderer[] renderers = child.GetComponentsInChildren<SpriteRenderer>();
+                t += Time.deltaTime;
+                foreach (var item in renderers)
+                {
+                    Color color = item.color;
+                    float value = Mathf.Lerp(color.r, darkAmmount, t / fadeTime);
+                    item.color = new Color(value, value, value, color.a);
+
+                }
+                yield return null;
+            }
+        }
     }
 
-    public void setFade()
+    IEnumerator LightenFamily()
     {
-        darken = false;
+        float t = 0f;
+        while (t < fadeTime)
+        {
+            t += Time.deltaTime;
+            foreach(var child in DarkenFamilyRenderers)
+            {
+                SpriteRenderer[] renderers = child.GetComponentsInChildren<SpriteRenderer>();
+                foreach (var item in renderers)
+                {
+                    Color color = item.color;
+                    float value = Mathf.Lerp(color.r, 1, t / fadeTime);
+                    item.color = new Color(value, value, value, color.a);
+                }
+            }
+            yield return null;
+        }
     }
 }

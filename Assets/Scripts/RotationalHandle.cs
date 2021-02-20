@@ -18,15 +18,17 @@ public class RotationalHandle : MonoBehaviour, Interactable
 
     private bool canBeRotated = true;
 
-    private const string  WinCode = "LLRRR";
+    public string  WinCode = "LLRRR";
     private string curCode = "";
 
+    public BoxCollider2D door;
     void Start()
     {
         collider = GetComponent<BoxCollider2D>();
         collider.isTrigger = true;
         gameObject.layer = LayerMask.NameToLayer("Interactable");
     }
+
 
 
     private void Update() {
@@ -62,6 +64,10 @@ public class RotationalHandle : MonoBehaviour, Interactable
     public void Interact()
     {
         curCode = "";
+        if (player.GetPlayerState() == PlayerState.IDLE)
+            player.SetPlayerState(PlayerState.INTERACTING);
+        else
+            player.SetPlayerState(PlayerState.IDLE);
     }
 
     IEnumerator RotateLock(string code)
@@ -74,7 +80,7 @@ public class RotationalHandle : MonoBehaviour, Interactable
         if(curCode == WinCode)
         {
             Debug.Log("CORRECT CODE");
-            onCodeSuccess();
+            door.enabled = false;   
 
         }
         else if(curCode.Length == WinCode.Length)

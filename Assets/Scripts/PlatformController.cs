@@ -46,7 +46,7 @@ public class PlatformController : RaycastController
                     Debug.DrawRay(rayOrigin, Vector2.up * directionY, Color.green);
 					if (!movedPassengers.Contains(hit.transform)) {
 						movedPassengers.Add(hit.transform);
-						float pushX = (directionY == 1)?velocity.x:0;
+						float pushX = (directionY == 1) ? velocity.x : 0;
 						float pushY = velocity.y - (hit.distance - skinWidth) * directionY;
 
 						hit.transform.Translate(new Vector3(pushX,pushY));
