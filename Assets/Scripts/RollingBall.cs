@@ -42,8 +42,8 @@ public class RollingBall : MonoBehaviour
     {
         if (transform.position.x < startPosition.x + targetLocation.x)
         {
-            transform.parent.transform.Translate(velocity);
-            rollingObject.transform.Rotate(new Vector3(0, 0, -1f * velocity.x * rotationSpeed));
+            transform.parent.transform.Translate(velocity * Time.deltaTime);
+            rollingObject.transform.Rotate(new Vector3(0, 0, -1f * velocity.x * rotationSpeed) * Time.deltaTime);
         }
     }
 
