@@ -5,8 +5,8 @@ using UnityEngine;
 public class PlatformController : RaycastController
 {
 
-	public float firstPosY;
-	public float secondPosY;
+   	public Transform startPosition;
+    public Transform endPosition;
 
 	public LayerMask passengerMask;
 	public Vector3 move;
@@ -21,8 +21,11 @@ public class PlatformController : RaycastController
 		Vector3 velocity = move * Time.deltaTime;
         
         if(col.IsTouchingLayers(passengerMask)) {	
-            transform.Translate (velocity);
-            MovePassengers(velocity);
+			if(transform.position.y < endPosition.position.y)
+			{
+				transform.Translate (velocity);
+				MovePassengers(velocity);
+			}
         }
 	}
 
@@ -98,5 +101,10 @@ public class PlatformController : RaycastController
 				}
 			}
 		}
+	}
+
+	public void ResetPlatform()
+	{
+		transform.position = startPosition.position;
 	}
 }

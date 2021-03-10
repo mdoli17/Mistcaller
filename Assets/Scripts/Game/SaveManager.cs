@@ -19,7 +19,7 @@ public class SaveManager
     byte[] key = Convert.FromBase64String(Encryption.cryptoKey);
     private static SaveManager instance = new SaveManager();
     
-    private readonly object pLock = new object();
+
     public static SaveManager shared
     {
         get { return instance; }
@@ -41,13 +41,13 @@ public class SaveManager
         }
 
         string json = JsonUtility.ToJson(save);
-        File.WriteAllText(savePath + filename, json);
+        File.WriteAllText(savePath + filename + ".txt", json);
     }
 
     public SaveObject ReadFromFile(string filename)
     {
         SaveObject save = null;
-        string json = File.ReadAllText(savePath + filename);
+        string json = File.ReadAllText(savePath + filename + ".txt");
         save = JsonUtility.FromJson<SaveObject>(json);
         return save;
     }
@@ -120,6 +120,18 @@ public static class Encryption
 [Serializable]
 public class SaveObject
 {
+    public SaveObject()
+    {
+
+    }
+
+    public SaveObject(Vector3 PlayerPosition, Vector3 RockPosition)
+    {
+        this.PlayerPosition = PlayerPosition;
+        this.RockPosition = RockPosition;
+    }
     public Vector3 PlayerPosition;
+
+    public Vector3 RockPosition;
     
 }

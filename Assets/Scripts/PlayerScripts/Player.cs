@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
+// using UnityEditor;
 
 
 
@@ -17,7 +17,7 @@ public enum PlayerState
 [RequireComponent (typeof (Controller2D))]
 public class Player : MonoBehaviour
 {
-    private const string SAVE_FILENAME = "Quicksave.txt";
+    private const string SAVE_FILENAME = "Quicksave";
     public float moveSpeed = 6;
     public float jumpHeight;
     public float timeToJump;
@@ -48,7 +48,7 @@ public class Player : MonoBehaviour
     private bool bCanInteract;
 Vector2 input;
     private void OnDrawGizmos() {
-        Handles.Label(transform.position + new Vector3(0, 5, 0), playerState.ToString());
+        // Handles.Label(transform.position + new Vector3(0, 5, 0), playerState.ToString());
         Gizmos.DrawLine(transform.position, transform.position + velocity.normalized);
     }
 
@@ -114,27 +114,11 @@ Vector2 input;
         if(Input.GetKeyDown(KeyCode.E))
         {
             GameObject interactable = interactChecker.getInteractableObject();
-            if(interactable && playerState != PlayerState.INTERACTING)
+            if(interactable)
             {
+                Debug.Log("Interactable Found");
                 interactable.GetComponent<Interactable>().Interact();
-               
             }   
-        }
-
-        if(Input.GetKeyDown(KeyCode.F5))
-        {
-            SaveObject save = new SaveObject();
-            save.PlayerPosition = transform.position;
-
-            SaveManager.shared.WriteToFile(save, SAVE_FILENAME);
-            Debug.Log("Save Successful");
-        }
-        else if(Input.GetKeyDown(KeyCode.F9))
-        {
-            SaveObject save = SaveManager.shared.ReadFromFile(SAVE_FILENAME);
-            gameObject.transform.position = save.PlayerPosition;
-
-            Debug.Log("Load Successful");
         }
     }
 
@@ -155,12 +139,14 @@ Vector2 input;
     
          input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
   
+        float targetVelocityX = input.x * moveSpeed * grabSlow;
         if(bSpace && controller.collisions.below && !controller.collisions.slidingDownMaxSlope)
         {
             velocity.y = jumpVelocity;
+            
+            targetVelocityX /= 2;
         }
 
-        float targetVelocityX = input.x * moveSpeed * grabSlow;
         if(controller.collisions.below)
             velocity.x = Mathf.SmoothDamp(velocity.x, targetVelocityX, ref velocityXSmoothing, (controller.collisions.below) ? accelerationTimeGrounded : accelerationTimeAirbourne); 
     
@@ -225,7 +211,7 @@ Vector2 input;
     }
 
     public void LaunchCharacter(Vector2 direction, bool overrideVelocity) {
-        Vector3 newDir = new Vector3(direction.x, direction.y, 0) * jumpVelocity;
+        Vector3 newDir = new Vector3(direction.x / 2.5f, direction.y, 0) * jumpVelocity;
         velocity = overrideVelocity ? newDir : velocity + newDir;
     }
 
@@ -235,6 +221,6 @@ Vector2 input;
 
     public void Die()
     {
-        GameManager.shared.ResetLevel();
+        GameManager.ResetLevel();
     }
 }

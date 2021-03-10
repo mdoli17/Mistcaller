@@ -5,20 +5,38 @@ using UnityEngine;
 [RequireComponent (typeof(BoxCollider2D))]
 public class PlatformTrigger : MonoBehaviour
 {
-    public LayerMask triggerMask;
 
     public delegate void TriggerDelegate();
-    public TriggerDelegate OnTriggerPressed;
+    public TriggerDelegate OnPlayerPressed;
     
+    public TriggerDelegate OnObstaclePressed;
+
+    bool obstaclePressed = false;
+
     void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.LogError("SESDONFUISODUFOSNFUS");
-        if(triggerMask == (triggerMask | (1 << other.gameObject.layer)))
+    
+        if(!obstaclePressed)
         {
-            if(OnTriggerPressed != null)
+            if(other.gameObject.layer == LayerMask.NameToLayer("Player"))
             {
-                OnTriggerPressed();
+                OnPlayerPressed();
+            } 
+            else if(other.gameObject.layer == LayerMask.NameToLayer("Movable"))
+            {
+                obstaclePressed = true;
+                OnObstaclePressed();
             }
+                
+        }
+        
+    }
+
+    private void OnTriggerExit2D(Collider2D other) {
+        if(other.gameObject.layer == LayerMask.NameToLayer("Movable"))
+        {
+            obstaclePressed = false;
+            OnPlayerPressed();
         }
     }
 }

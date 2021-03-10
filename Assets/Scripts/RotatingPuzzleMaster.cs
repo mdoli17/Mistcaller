@@ -6,6 +6,7 @@ public class RotatingPuzzleMaster : MonoBehaviour
 {
     public RotatingPuzzleObject[] objects;
     public BoxCollider2D door;
+    public GameObject doorSprite;
 
     public int target;
 
@@ -25,6 +26,7 @@ public class RotatingPuzzleMaster : MonoBehaviour
         if (door)
         {
             door.enabled = false;
+            doorSprite.SetActive(false);
         }
     }
 }

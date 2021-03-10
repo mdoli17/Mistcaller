@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(BoxCollider2D))]
 public class DeathPad : MonoBehaviour
 {
-    
+    GameObject player;
     // Start is called before the first frame update
     void Start()
     {
-       
+       GetComponent<BoxCollider2D>().isTrigger = true;
     }
 
     // Update is called once per frame
@@ -21,15 +22,17 @@ public class DeathPad : MonoBehaviour
     {
         if(other.transform.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-            //other.transform.gameObject.GetComponentInChildren<HealthComponent>().TakeDamage(150);
+            Debug.Log("Player Entered");
+            player = other.gameObject;
             StartCoroutine(ResetPlayer());
         }
     }
 
     IEnumerator ResetPlayer()
     {
+        player.GetComponent<Player>().enabled = false;
         yield return new WaitForSeconds(2);
-        SaveObject save = SaveManager.shared.ReadFromFile("Quicksave.txt");
-        gameObject.transform.position = save.PlayerPosition;
+        player.GetComponent<Player>().enabled = true;
+        GameManager.ResetLevel();
     }
 }

@@ -25,12 +25,9 @@ public class RotationalHandle : MonoBehaviour, Interactable
     void Start()
     {
         collider = GetComponent<BoxCollider2D>();
-        collider.isTrigger = true;
+        // collider.isTrigger = true;
         gameObject.layer = LayerMask.NameToLayer("Interactable");
     }
-
-
-
     private void Update() {
         if(player)
         {
@@ -47,52 +44,48 @@ public class RotationalHandle : MonoBehaviour, Interactable
         }  
     }
 
-    private void OnTriggerEnter2D(Collider2D other) {
-        if(other.gameObject.layer == LayerMask.NameToLayer("Player"))
-        {
-            player = (Player) other.gameObject.GetComponent<Player>();
-        }
-    }
-
-    private void OnTriggerExit2D(Collider2D other) {
-        if(other.gameObject.layer == LayerMask.NameToLayer("Player"))
-        {
-            player = null;
-        }
-    }
 
     public void Interact()
     {
+        player = FindObjectOfType<Player>();
         curCode = "";
         if (player.GetPlayerState() == PlayerState.IDLE)
             player.SetPlayerState(PlayerState.INTERACTING);
         else
+        {
             player.SetPlayerState(PlayerState.IDLE);
+            curCode = "";
+            player = null;
+        }
     }
 
     IEnumerator RotateLock(string code)
     {
         canBeRotated = false;
-        Debug.Log("Rotation Locked");
+
         yield return new WaitForSeconds(rotationTime);
-        Debug.Log("Rotated");
+
         curCode += code;
+        Debug.Log(curCode);
         if(curCode == WinCode)
         {
             Debug.Log("CORRECT CODE");
-            door.enabled = false;   
+            
+            door.gameObject.SetActive(false);   
+            player.SetPlayerState(PlayerState.IDLE);
 
         }
         else if(curCode.Length == WinCode.Length)
         {
+            player.SetPlayerState(PlayerState.IDLE);
             curCode = "";
+            player = null;
             Debug.Log("WRONG CODE");
         }
         canBeRotated = true;
     }
 
     private void OnDrawGizmos() {
-        Handles.Label(transform.position + new Vector3(0,7,0), WinCode);
-        Handles.Label(transform.position + new Vector3(0,5,0), curCode);
+
     }
 }

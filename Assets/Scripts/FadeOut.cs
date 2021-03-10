@@ -7,6 +7,7 @@ public class FadeOut : MonoBehaviour
     // Start is called before the first frame update
 
     public SpriteRenderer[] FadeRenderers;
+
     public SpriteRenderer[] DarkSingleRenderers;
     public GameObject[] DarkenFamilyRenderers;
 
@@ -36,9 +37,10 @@ public class FadeOut : MonoBehaviour
         {
              
             StopAllCoroutines();
-            StartCoroutine(DarkenSingle());
-            StartCoroutine(DarkenFamily());
+            if(DarkSingleRenderers.Length != 0) StartCoroutine(DarkenSingle());
+            if(DarkenFamilyRenderers.Length != 0)StartCoroutine(DarkenFamily());
             StartCoroutine(FadeIn());
+
         }
     }
 
@@ -49,9 +51,10 @@ public class FadeOut : MonoBehaviour
         {
             StopAllCoroutines();
             
-            StartCoroutine(LightenSingle());
-            StartCoroutine(LightenFamily());
+            if(DarkSingleRenderers.Length != 0) StartCoroutine(LightenSingle());
+            if(DarkenFamilyRenderers.Length != 0) StartCoroutine(LightenFamily());
             StartCoroutine(Fadeout());
+
         }
     }
 
@@ -86,12 +89,6 @@ public class FadeOut : MonoBehaviour
                 float alpha = Mathf.Lerp(color.a,startAlphas[i],t / fadeTime);
                 item.color = new Color(color.r,color.g,color.b, alpha);
             }
-            // foreach (var item in FadeRenderers)
-            // {
-            //     Color color = item.color;
-            //     float alpha = Mathf.Lerp(color.a,1,t / fadeTime);
-            //     item.color = new Color(color.r,color.g,color.b, alpha);
-            // }
             yield return null;
         }
     }

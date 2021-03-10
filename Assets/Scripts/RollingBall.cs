@@ -33,6 +33,11 @@ public class RollingBall : MonoBehaviour
         
     }
 
+    public void ResetBall()
+    {
+        velocity = Vector3.zero;
+    }
+
     void Update()
     {
         if (transform.position.x < startPosition.x + targetLocation.x)

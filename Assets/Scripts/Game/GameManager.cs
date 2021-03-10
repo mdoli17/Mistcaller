@@ -9,20 +9,30 @@ public class GameManager : MonoBehaviour
     
     private GameObject[] ObjectsToSave;
 
-    private static GameManager instance = new GameManager();
-   
     
-    public static GameManager shared
+    public static GameObject player;
+    public static GameObject rock;
+
+
+    public static void ResetLevel()
     {
-        get { return shared; }
+        SaveObject save = SaveManager.shared.ReadFromFile("Autosave");
+        player.transform.position = save.PlayerPosition + new Vector3(5,0,0);
+        rock.transform.position = save.RockPosition;
+        rock.GetComponentInChildren<RollingBall>().ResetBall();
+    }
+    
+    private void Start() {
+        player = FindObjectOfType<Player>().gameObject;
+        rock = FindObjectOfType<RollingBall>().transform.parent.gameObject;
+        Debug.Log(rock == null);
     }
 
-    public void ResetLevel()
+    public static void SaveGame()
     {
-        SaveObject save = SaveManager.shared.ReadFromFile("CheckpointSave.txt");
-        
+        SaveObject save = new SaveObject(player.transform.position, rock.transform.position);
+        SaveManager.shared.WriteToFile(save, "Autosave");
     }
-    
 }
 
 

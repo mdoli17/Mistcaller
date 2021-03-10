@@ -12,7 +12,7 @@ public class VerticalDoor : MonoBehaviour
     void Start()
     {
         startPosition = transform.position;
-        trigger.OnTriggerPressed += StartMovement;
+        trigger.OnPlayerPressed += StartMovement;
     }
 
     void StartMovement()
