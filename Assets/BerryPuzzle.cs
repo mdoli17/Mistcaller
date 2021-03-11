@@ -11,7 +11,7 @@ public class BerryPuzzle : MonoBehaviour
 
     public GameObject door;
 
-    private const string TargetCommand = "RPYPGP";
+    private const string TargetCommand = "RPGPYP";
 
     private string current = "";
     private string color;
