@@ -10,7 +10,7 @@ public class BellPuzzle : MonoBehaviour
 
     public PlatformController elevator;
 
-    private const string TargetCommand = "MHL";
+    private const string TargetCommand = "MLH";
 
     private string current = "";
 

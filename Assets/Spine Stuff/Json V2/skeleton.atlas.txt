@@ -1,0 +1,97 @@
+
+skeleton.png
+size: 1982,697
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Close eyes
+  rotate: false
+  xy: 1691, 63
+  size: 241, 68
+  orig: 241, 68
+  offset: 0, 0
+  index: -1
+Eyes black
+  rotate: false
+  xy: 1691, 133
+  size: 272, 85
+  orig: 272, 85
+  offset: 0, 0
+  index: -1
+Hair
+  rotate: false
+  xy: 947, 2
+  size: 429, 419
+  orig: 429, 419
+  offset: 0, 0
+  index: -1
+Head 2
+  rotate: false
+  xy: 1378, 59
+  size: 311, 362
+  orig: 311, 362
+  offset: 0, 0
+  index: -1
+Leg
+  rotate: true
+  xy: 2, 111
+  size: 117, 769
+  orig: 117, 769
+  offset: 0, 0
+  index: -1
+Robe left
+  rotate: true
+  xy: 2, 230
+  size: 195, 943
+  orig: 195, 943
+  offset: 0, 0
+  index: -1
+Robe right
+  rotate: true
+  xy: 1039, 516
+  size: 179, 883
+  orig: 179, 883
+  offset: 0, 0
+  index: -1
+body
+  rotate: true
+  xy: 2, 427
+  size: 268, 1035
+  orig: 268, 1035
+  offset: 0, 0
+  index: -1
+hand left
+  rotate: true
+  xy: 2, 2
+  size: 107, 598
+  orig: 107, 598
+  offset: 0, 0
+  index: -1
+hand left 2
+  rotate: false
+  xy: 773, 116
+  size: 53, 112
+  orig: 53, 112
+  offset: 0, 0
+  index: -1
+hand right 2
+  rotate: true
+  xy: 602, 56
+  size: 53, 112
+  orig: 53, 112
+  offset: 0, 0
+  index: -1
+hand right v2
+  rotate: true
+  xy: 1039, 423
+  size: 91, 549
+  orig: 91, 549
+  offset: 0, 0
+  index: -1
+sayelo
+  rotate: true
+  xy: 1691, 220
+  size: 294, 289
+  orig: 294, 289
+  offset: 0, 0
+  index: -1
