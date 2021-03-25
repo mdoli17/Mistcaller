@@ -18,6 +18,9 @@ public enum PlayerState
 public class Player : MonoBehaviour
 {
     private const string SAVE_FILENAME = "Quicksave";
+
+    public int MaxNumOfJumps = 2;
+    private int numOfJumps;
     public float moveSpeed = 6;
     public float jumpHeight;
     public float timeToJump;
@@ -69,6 +72,7 @@ Vector2 input;
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            if(numOfJumps != 0) numOfJumps--;
             bSpace = true;
             playerAnimator.SetBool("bIsJumping", true);
         }
@@ -120,11 +124,12 @@ Vector2 input;
                 interactable.GetComponent<Interactable>().Interact();
             }   
         }
+        
     }
 
     void FixedUpdate()
     {
-
+        if(controller.collisions.below) numOfJumps = MaxNumOfJumps;
         if(controller.collisions.above || controller.collisions.below)
         {
             if(controller.collisions.slidingDownMaxSlope)
@@ -140,11 +145,14 @@ Vector2 input;
          input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
   
         float targetVelocityX = input.x * moveSpeed * grabSlow;
-        if(bSpace && controller.collisions.below && !controller.collisions.slidingDownMaxSlope)
+        if(bSpace && !controller.collisions.slidingDownMaxSlope)
         {
-            velocity.y = jumpVelocity;
-            
-            targetVelocityX /= 2;
+            if(controller.collisions.below || numOfJumps != 0)
+            {
+                velocity.y = jumpVelocity;        
+                targetVelocityX /= 2;
+                
+            }
         }
 
         if(controller.collisions.below)
