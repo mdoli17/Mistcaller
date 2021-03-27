@@ -178,6 +178,7 @@ Vector2 input;
                 playerState = PlayerState.MOVING;
             }
         }
+        bSpace = false;
     }
 
     void CalculateGravityAndVelocity()
