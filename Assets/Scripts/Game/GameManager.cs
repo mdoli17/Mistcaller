@@ -23,9 +23,8 @@ public class GameManager : MonoBehaviour
     }
     
     private void Start() {
-        player = FindObjectOfType<Player>().gameObject;
+        player = FindObjectOfType<NewPlayer>().gameObject;
         rock = FindObjectOfType<RollingBall>().transform.parent.gameObject;
-        Debug.Log(rock == null);
     }
 
     public static void SaveGame()
