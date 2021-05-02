@@ -26,7 +26,7 @@ public class SpinningWheel : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.Rotate(speed);
+        transform.Rotate(speed * Time.deltaTime);
     }
 
     void onLeverInteract()

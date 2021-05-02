@@ -43,6 +43,8 @@ public class NewPlayer : MonoBehaviour {
     Animator playerAnimator;
 
 	private bool bCanInteract;
+	private int numOfJumps;
+	public int MaxNumOfJumps = 2;
 
 
 	void Start() {
@@ -59,6 +61,7 @@ public class NewPlayer : MonoBehaviour {
 		CalculateVelocity ();
 		HandleWallSliding ();
 
+		if(controller.collisions.below) numOfJumps = MaxNumOfJumps;
 		if(playerState != PlayerState.INTERACTING && playerState != PlayerState.ONROPE)
         {
 			controller.Move (velocity * Time.deltaTime, directionalInput);
@@ -153,13 +156,14 @@ public class NewPlayer : MonoBehaviour {
 				velocity.y = wallLeap.y;
 			}
 		}
-		if (controller.collisions.below) {
+		if (controller.collisions.below || numOfJumps != 0) {
 			if (controller.collisions.slidingDownMaxSlope) {
 				if (directionalInput.x != -Mathf.Sign (controller.collisions.slopeNormal.x)) { // not jumping against max slope
 					velocity.y = maxJumpVelocity * controller.collisions.slopeNormal.y;
 					velocity.x = maxJumpVelocity * controller.collisions.slopeNormal.x;
 				}
 			} else {
+				if(numOfJumps != 0) numOfJumps--;
 				velocity.y = maxJumpVelocity;
 			}
 		}
