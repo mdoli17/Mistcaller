@@ -28,7 +28,7 @@ public class TriggerEnablePhysics : MonoBehaviour
         if(other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
             
-            Controller2D controller = other.gameObject.GetComponent<Controller2D>();
+            NewController2D controller = other.gameObject.GetComponent<NewController2D>();
             if(!controller.collisions.below)
             {
                 Debug.Log(jumpAmmount);

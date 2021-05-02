@@ -49,7 +49,7 @@ public class HandleCheck : MonoBehaviour
             {
                 MovableScript movable = other.gameObject.GetComponentInParent<MovableScript>();
                 
-                movable.setTargetVelocityX(GetComponentInParent<Player>().getVelocity().x);
+                movable.setTargetVelocityX(GetComponentInParent<NewPlayer>().getVelocity().x);
             }
         }
     }

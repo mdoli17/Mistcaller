@@ -17,7 +17,7 @@ public class RopeScript : MonoBehaviour
     
     bool bPlayerIsOnRope = false;
     Transform PlayerStartTransform;
-    Player player;
+    NewPlayer player;
     int objIndex;
     // Use this for initialization
     void Start()
@@ -96,7 +96,7 @@ public class RopeScript : MonoBehaviour
             }
         }                
 
-        if(player.GetPlayerState() == PlayerState.ONROPE) {
+        if(player && player.GetPlayerState() == PlayerState.ONROPE) {
             // Check on which index is the player hanging
             float startY = startPoint.position.y;
             float startX = startPoint.position.x;
@@ -189,7 +189,7 @@ public class RopeScript : MonoBehaviour
                     Debug.DrawRay(ropeSegments[i].posNow, direction, Color.red);
 
                     if(hit) {
-                        player = hit.transform.gameObject.GetComponent<Player>();
+                        player = hit.transform.gameObject.GetComponent<NewPlayer>();
                         PlayerStartTransform.position = player.gameObject.transform.position;
                         player.SetPlayerState(PlayerState.ONROPE);
 

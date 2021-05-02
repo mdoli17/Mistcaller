@@ -30,9 +30,9 @@ public class DeathPad : MonoBehaviour
 
     IEnumerator ResetPlayer()
     {
-        player.GetComponent<Player>().enabled = false;
+        player.GetComponent<NewPlayerInput>().enabled = false;
         yield return new WaitForSeconds(2);
-        player.GetComponent<Player>().enabled = true;
+        player.GetComponent<NewPlayerInput>().enabled = true;
         GameManager.ResetLevel();
     }
 }
