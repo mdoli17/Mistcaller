@@ -2,21 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(BoxCollider2D))]
+[RequireComponent(typeof(PolygonCollider2D))]
 public class DeathPad : MonoBehaviour
 {
     GameObject player;
     // Start is called before the first frame update
     void Start()
     {
-       GetComponent<BoxCollider2D>().isTrigger = true;
+       GetComponent<PolygonCollider2D>().isTrigger = true;
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    
 
     void OnTriggerEnter2D(Collider2D other)
     {

@@ -38,11 +38,6 @@ public class LevelEnabler : MonoBehaviour
         if(other.gameObject.layer == LayerMask.NameToLayer("Player")) {
             if(next) next.SetActive(next.activeSelf ? false : true);
             if(last) last.SetActive(last.activeSelf ? false : true);
-            if(firstTime)
-            {
-                firstTime = false;
-                GameManager.SaveGame();
-            }
         }
     }
 
