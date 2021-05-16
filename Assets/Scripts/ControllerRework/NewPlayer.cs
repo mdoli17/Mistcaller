@@ -44,8 +44,9 @@ public class NewPlayer : MonoBehaviour {
 
 	private bool bCanInteract;
 	private int numOfJumps;
-	public int MaxNumOfJumps = 2;
+	public int MaxNumOfJumps = 1;
 
+	public bool bCanDoubleJump = true;
 
 	void Start() {
 		controller = GetComponent<NewController2D> ();
@@ -156,15 +157,24 @@ public class NewPlayer : MonoBehaviour {
 				velocity.y = wallLeap.y;
 			}
 		}
-		if (controller.collisions.below || numOfJumps != 0) {
+		if (controller.collisions.below || numOfJumps != -1) {
 			if (controller.collisions.slidingDownMaxSlope) {
 				if (directionalInput.x != -Mathf.Sign (controller.collisions.slopeNormal.x)) { // not jumping against max slope
 					velocity.y = maxJumpVelocity * controller.collisions.slopeNormal.y;
 					velocity.x = maxJumpVelocity * controller.collisions.slopeNormal.x;
 				}
 			} else {
-				if(numOfJumps != 0) numOfJumps--;
-				velocity.y = maxJumpVelocity;
+				Debug.Log(numOfJumps);
+				if (numOfJumps > 0)
+				{
+					numOfJumps--;
+					velocity.y = maxJumpVelocity;
+				}
+				else if(numOfJumps == 0 && bCanDoubleJump)
+				{
+					numOfJumps--;
+					velocity.y = maxJumpVelocity;
+				}
 			}
 		}
 	}

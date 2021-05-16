@@ -7,9 +7,9 @@ using UnityEngine;
 public class LevelEnabler : MonoBehaviour
 {
     [SerializeField]
-    private GameObject last;
+    private GameObject[] last;
     [SerializeField]
-    private GameObject next;
+    private GameObject[] next;
     
     bool firstTime = true;
 
@@ -21,10 +21,13 @@ public class LevelEnabler : MonoBehaviour
         collider.size = new Vector2(collider.size.x, 60);
         if(disableLevels)
         {
-            if(next && next.name != "Scene 03.1 Lodi") next.SetActive(false);
-            else if(next.name == "Scene 03.1 Lodi")
+            foreach (var VARIABLE in next)
             {
-                StartCoroutine(disableInTime(next));
+                if(VARIABLE && VARIABLE.name != "Scene 03.1 Lodi") VARIABLE.SetActive(false);
+                else if(VARIABLE.name == "Scene 03.1 Lodi")
+                {
+                    StartCoroutine(disableInTime(VARIABLE));
+                }
             }
         }
     }
@@ -36,8 +39,21 @@ public class LevelEnabler : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D other) {
         if(other.gameObject.layer == LayerMask.NameToLayer("Player")) {
-            if(next) next.SetActive(next.activeSelf ? false : true);
-            if(last) last.SetActive(last.activeSelf ? false : true);
+            if (next.Length != 0)
+            {
+                foreach (var VARIABLE in next)
+                {
+                    VARIABLE.SetActive(VARIABLE.activeSelf ? false : true);
+                }
+            }
+            if (last.Length != 0)
+            {
+                foreach (var VARIABLE in last)
+                {
+                    VARIABLE.SetActive(VARIABLE.activeSelf ? false : true);
+                }
+            }
+            
         }
     }
 

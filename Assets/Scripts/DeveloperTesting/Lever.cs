@@ -12,7 +12,7 @@ public class Lever : MonoBehaviour, Interactable
 
     private AudioSource audioSource;
 
-    private Player player;
+    private NewPlayer player;
     void Start()
     {
         audioSource = GetComponent<AudioSource>();
@@ -21,7 +21,7 @@ public class Lever : MonoBehaviour, Interactable
 
     public void Interact()
     {
-        player = FindObjectOfType<Player>();
+        player = FindObjectOfType<NewPlayer>();
         if(player.GetPlayerState() == PlayerState.IDLE) {
             Debug.Log("Interacted");
             audioSource.Play();

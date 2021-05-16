@@ -21,12 +21,12 @@ public class RollingBall : MonoBehaviour
     {
         if(other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-            Player playerController = other.gameObject.GetComponent<Player>();
+            NewPlayer playerController = other.gameObject.GetComponent<NewPlayer>();
             float direction = Mathf.Sign(playerController.getVelocity().x);
             if(playerController.getVelocity().x != 0)
             {
                 float targetVelocityX = playerController.getVelocity().x * ballSpeed;
-                velocity.x = Mathf.SmoothDamp(velocity.x, targetVelocityX, ref velocityXSmoothing, (other.GetComponent<Controller2D>().collisions.below) ? accelerationTimeGrounded : 5);
+                velocity.x = Mathf.SmoothDamp(velocity.x, targetVelocityX, ref velocityXSmoothing, (other.GetComponent<NewController2D>().collisions.below) ? accelerationTimeGrounded : 5);
                 
             }
         }
