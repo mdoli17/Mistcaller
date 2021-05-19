@@ -9,7 +9,7 @@ public class RotationalHandle : MonoBehaviour, Interactable
 
     public delegate void SafeCodeDelegate();
     public SafeCodeDelegate onCodeSuccess;
-    private Player player;
+    private NewPlayer player;
 
     public float rotationTime;
     private BoxCollider2D collider;
@@ -47,7 +47,7 @@ public class RotationalHandle : MonoBehaviour, Interactable
 
     public void Interact()
     {
-        player = FindObjectOfType<Player>();
+        player = FindObjectOfType<NewPlayer>();
         curCode = "";
         if (player.GetPlayerState() == PlayerState.IDLE)
             player.SetPlayerState(PlayerState.INTERACTING);

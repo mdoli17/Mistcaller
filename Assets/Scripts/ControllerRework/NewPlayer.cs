@@ -116,8 +116,7 @@ public class NewPlayer : MonoBehaviour {
             GameObject interactable = interactChecker.getInteractableObject();
             if(interactable)
             {
-                Debug.Log("Interactable Found");
-                interactable.GetComponent<Interactable>().Interact();
+	            interactable.GetComponent<Interactable>().Interact();
             }   
         }
 

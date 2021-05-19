@@ -5,8 +5,8 @@ using UnityEngine;
 public class RotatingPuzzleMaster : MonoBehaviour
 {
     public RotatingPuzzleObject[] objects;
-    public BoxCollider2D door;
-    public GameObject doorSprite;
+
+    public Animator doorAnimator;
 
     public int target;
 
@@ -14,6 +14,7 @@ public class RotatingPuzzleMaster : MonoBehaviour
     {
         foreach (RotatingPuzzleObject obj in objects)
         {
+            Debug.Log(obj.name + "Number: " + obj.getCurrentNumber());
             if (obj.getCurrentNumber() != target)
                 return;
         }
@@ -23,10 +24,8 @@ public class RotatingPuzzleMaster : MonoBehaviour
 
     private void OnPuzzleSolve()
     {
-        if (door)
-        {
-            door.enabled = false;
-            doorSprite.SetActive(false);
-        }
+        Debug.Log("Puzzle Solved");
+        doorAnimator.SetTrigger("Door Opened");
+        
     }
 }

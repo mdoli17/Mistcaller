@@ -1,7 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
-// using UnityEditor;
+using UnityEditor;
 
 public class RotatingPuzzleObject : MonoBehaviour
 {
@@ -17,7 +18,7 @@ public class RotatingPuzzleObject : MonoBehaviour
 
     void OnDrawGizmos()
     {
-        // Handles.Label(new Vector3(transform.position.x, transform.position.y + 10, transform.position.z), Number.ToString());
+        Handles.Label(new Vector3(transform.position.x, transform.position.y + 10, transform.position.z), Number.ToString());
     }
 
     public void Increment()
@@ -33,6 +34,7 @@ public class RotatingPuzzleObject : MonoBehaviour
         
         foreach (RotatingPuzzleObject obj in objects)
         {
+            
             obj.Increment();
         }
         GetComponentInParent<RotatingPuzzleMaster>().checkPuzzle();

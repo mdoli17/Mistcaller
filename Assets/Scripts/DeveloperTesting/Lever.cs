@@ -23,7 +23,6 @@ public class Lever : MonoBehaviour, Interactable
     {
         player = FindObjectOfType<NewPlayer>();
         if(player.GetPlayerState() == PlayerState.IDLE) {
-            Debug.Log("Interacted");
             audioSource.Play();
             if(LeverInteractDelegate != null)
             {
