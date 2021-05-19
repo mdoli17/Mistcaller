@@ -25,7 +25,6 @@ public class InteractChecker : MonoBehaviour
             filter.SetLayerMask(masks);
             Collider2D[] results = new Collider2D[1];
             checker.OverlapCollider(filter, results);
-            Debug.Log(results[0] == null);
             return results[0].gameObject;
         }
         return null;

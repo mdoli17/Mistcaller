@@ -14,7 +14,7 @@ public class BellPuzzle : MonoBehaviour
     
     public PlatformController elevator;
 
-    private const string TargetCommand = "MLH";
+    private const string TargetCommand = "MHLH";
 
     private string current = "";
     public SpriteRenderer onFailImage;
