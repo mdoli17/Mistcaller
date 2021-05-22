@@ -1,28 +1,49 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class FishPuzzle : MonoBehaviour
 {
-    public Lever SpikeLever;
-    public Lever CageLever;
-    public GameObject spikes;
-    public GameObject cage;
-    public GameObject upperCage;
+    public Lever ropeLever;
+    public Lever spikeLever;
+    public Lever cageLever;
 
-    private void Start() {
-        SpikeLever.LeverInteractDelegate += OpenSpikes;
-        CageLever.LeverInteractDelegate += OpenCages;
+    public GameObject ropeObject;
+    public GameObject spikeObject;
+    public GameObject cageObject;
+    public GameObject additionalRopeObject;
+    public Transform cageTargetLocation;
+
+    public Animator animator;
+    private void Start()
+    {
+        ropeLever.LeverInteractDelegate += OnRopeLever;
+        spikeLever.LeverInteractDelegate += OnSpikeLever;
+        cageLever.LeverInteractDelegate += OnCageLever;
     }
 
-    void OpenSpikes()
+    private void OnRopeLever()
     {
-        spikes.SetActive(false);
+        ropeObject.SetActive(!ropeObject.activeSelf);
     }
 
-    void OpenCages()
+    private void OnSpikeLever()
     {
-        upperCage.SetActive(false);
-        cage.SetActive(true);
+        spikeObject.SetActive(!spikeObject.activeSelf);
+        additionalRopeObject.SetActive(!additionalRopeObject.activeSelf);
+    }
+
+    private void OnCageLever()
+    {
+        animator.SetBool("CageDropped", true);
+        cageObject.transform.position = cageTargetLocation.transform.position;
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.layer != LayerMask.NameToLayer("Player")) return;
+        Debug.Log("AEEAEE");
+        animator.SetTrigger("PlayerEntered");
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -26,7 +27,10 @@ public class BerryPuzzle : MonoBehaviour
     public Sprite Purple;
     public Sprite Blue;
 
-    
+    private Dictionary<char, Sprite> colors;
+
+    public SpriteRenderer owlLeftEye;
+    public SpriteRenderer owlRightEye;
     
     private void Start() {
         red.LeverInteractDelegate += onRed;
@@ -34,6 +38,15 @@ public class BerryPuzzle : MonoBehaviour
         yellow.LeverInteractDelegate += onYellow;
         pot.LeverInteractDelegate += onPot;
         owl.LeverInteractDelegate += onOwl;
+
+        colors = new Dictionary<char, Sprite>();
+        colors.Add('R', Red);
+        colors.Add('G', Green);
+        colors.Add('B', Blue);
+        colors.Add('Y', Yellow);
+        colors.Add('O', Orange);
+        colors.Add('P', Purple);
+        
     }
     
     private void onRed()
@@ -103,39 +116,40 @@ public class BerryPuzzle : MonoBehaviour
     private void onOwl()
     {
         _owlColor += _playerCurrentColor;
+        switch (_owlColor.Length)
+        {
+            case 1:
+                owlLeftEye.sprite = colors[_owlColor[0]];
+                break;
+            case 2:
+                owlRightEye.sprite = colors[_owlColor[1]];
+                break;
+        }
         _playerCurrentColor = "";
         if (_owlColor.Length == 2)
         {
+            StartCoroutine(ResetOwl()); 
             switch (_owlColor)
             {
                 case "PG":
                 case "GP":
                     onPuzzleComplete();
                     break;
-                default:
-                    _owlColor = "";
-                    break;
             }
+            _owlColor = "";
         }
         SpriteRenderer renderer = FindObjectOfType<InteractChecker>().gameObject.GetComponent<SpriteRenderer>();
         renderer.sprite = null;
     }
+    
 
-    private void CheckCondition()
+    private IEnumerator ResetOwl()
     {
-        if (current.Length == TargetCommand.Length)
-        {
-            if (current == TargetCommand)
-            {
-                Destroy(door);
-            }
-            else {
-
-            }
-            current = "";
-        }
+        yield return new WaitForSeconds(1f);
+        owlLeftEye.sprite = null;
+        owlRightEye.sprite = null;
     }
-
+    
     private void onPuzzleComplete()
     {
         door.SetActive(false);
