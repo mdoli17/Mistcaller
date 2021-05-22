@@ -49,6 +49,7 @@ public class NewPlayer : MonoBehaviour {
 	public bool bCanDoubleJump = true;
 
 	void Start() {
+		
 		controller = GetComponent<NewController2D> ();
 		interactChecker = GetComponentInChildren<InteractChecker>();
 		grabSlow = 1;
@@ -59,6 +60,7 @@ public class NewPlayer : MonoBehaviour {
 	}
 
 	void Update() {
+		
 		CalculateVelocity ();
 		HandleWallSliding ();
 

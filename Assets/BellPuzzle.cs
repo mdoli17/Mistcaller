@@ -12,7 +12,7 @@ public class BellPuzzle : MonoBehaviour
     public Animator midNoteAnimator;
     public Animator highNoteAnimator;
     
-    public PlatformController elevator;
+    public ElevatorController elevator;
 
     private const string TargetCommand = "MHLH";
 
