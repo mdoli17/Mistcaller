@@ -16,10 +16,10 @@ public class RotatingPuzzleObject : MonoBehaviour
         lever.LeverInteractDelegate += leverFunction;
     }
 
-    void OnDrawGizmos()
-    {
-        Handles.Label(new Vector3(transform.position.x, transform.position.y + 10, transform.position.z), Number.ToString());
-    }
+    // void OnDrawGizmos()
+    // {
+    //     Handles.Label(new Vector3(transform.position.x, transform.position.y + 10, transform.position.z), Number.ToString());
+    // }
 
     public void Increment()
     {
