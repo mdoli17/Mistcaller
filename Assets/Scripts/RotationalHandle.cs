@@ -21,6 +21,7 @@ public class RotationalHandle : MonoBehaviour, Interactable
     public string  WinCode = "LLRRR";
     private string curCode = "";
 
+    public Animator animator;
     public BoxCollider2D door;
     void Start()
     {
@@ -35,10 +36,16 @@ public class RotationalHandle : MonoBehaviour, Interactable
             {
                 if(canBeRotated) 
                 {
-                    if(Input.GetKeyDown(KeyCode.A))
+                    if (Input.GetKeyDown(KeyCode.A))
+                    {
                         StartCoroutine(RotateLock("L"));
-                else if (Input.GetKeyDown(KeyCode.D))
+                        animator.SetTrigger("OnLeftClick");
+                    }
+                    else if (Input.GetKeyDown(KeyCode.D))
+                    {
                         StartCoroutine(RotateLock("R"));
+                        animator.SetTrigger("OnRightClick");
+                    }
                 }
             } 
         }  

@@ -18,11 +18,10 @@ public class OpenDoor : MonoBehaviour
         {
             lever.LeverInteractDelegate += leverFunction;  
         }
-        if(trigger)
-        {
-            trigger.OnObstaclePressed += OnObstacleSteppedOnTrigger;
-            trigger.OnPlayerPressed += OnPlayerSteppedOnTrigger;
-        }
+
+        if (!trigger) return;
+        trigger.onObstaclePressed += OnObstacleSteppedOnTrigger;
+        trigger.onPlayerPressed += OnPlayerSteppedOnTrigger;
     }
 
     void OnPlayerSteppedOnTrigger() {

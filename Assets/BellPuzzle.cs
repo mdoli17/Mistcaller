@@ -49,21 +49,12 @@ public class BellPuzzle : MonoBehaviour
 
     private void CheckCondition()
     {
-        if (current.Length == TargetCommand.Length)
-        {
-            if (current == TargetCommand)
-            {
-                elevator.ResetPlatform();
-            }
-            onFailImage.gameObject.SetActive(true);
-            StartCoroutine(DeactivateIn(0.3f));
-            current = "";
-        }
-    }
+        if (current.Length > TargetCommand.Length)
+            current = current.Substring(1);
 
-    IEnumerator DeactivateIn(float time)
-    {
-        yield return new WaitForSeconds(time);
-        onFailImage.gameObject.SetActive(false);
+        if (current == TargetCommand)
+            elevator.ResetPlatform();
+        
+
     }
 }

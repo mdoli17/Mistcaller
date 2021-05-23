@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Helpers;
 using UnityEngine;
 
 [RequireComponent (typeof(BoxCollider2D))]
@@ -13,10 +14,12 @@ public class Lever : MonoBehaviour, Interactable
     private AudioSource audioSource;
 
     private NewPlayer player;
+    private Animator leverAnimator;
+    
     void Start()
     {
         audioSource = GetComponent<AudioSource>();
-
+        leverAnimator = GetComponent<Animator>();
     }
 
     public void Interact()
@@ -24,6 +27,7 @@ public class Lever : MonoBehaviour, Interactable
         player = FindObjectOfType<NewPlayer>();
         if(player.GetPlayerState() == PlayerState.IDLE) {
             audioSource.Play();
+            leverAnimator.SetTrigger(AnimationInfos.Trigger.ClickAnimationTrigger);
             if(LeverInteractDelegate != null)
             {
                 LeverInteractDelegate();

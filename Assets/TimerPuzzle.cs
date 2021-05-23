@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Helpers;
 using UnityEngine;
 
 public class TimerPuzzle : MonoBehaviour
@@ -10,41 +11,47 @@ public class TimerPuzzle : MonoBehaviour
     public Lever first;
     public Lever second;
     public Lever third;
-
+    
     public SpriteRenderer spriteFirst, spriteSecond, spriteThird;
 
     public AbilityDisabler disabler;
 
+    public PlatformTrigger platform;
+
+    public Animator doorAnimator;
+    [SerializeField] private float closeDoorIn;
     private void Awake()
     {
-        first.LeverInteractDelegate += OnFirstrInteract;
+        first.LeverInteractDelegate += OnFirstInteract;
         second.LeverInteractDelegate += OnSecondInteract;
         third.LeverInteractDelegate += OnThirdInteract;
+        platform.onObstaclePressed += OnPlatformObstaclePressed;
+        platform.onPlayerPressed += OnPlatformPlayerPressed;
     }
 
-    public void OnFirstrInteract()
+    private void OnFirstInteract()
     {
         lettersFound++;
         first.GetComponent<Renderer>().enabled = false;
-        first.LeverInteractDelegate -= OnFirstrInteract;
+        first.LeverInteractDelegate -= OnFirstInteract;
         spriteFirst.gameObject.SetActive(false);
         OnInteract();
     }
 
-    public void OnSecondInteract()
+    private void OnSecondInteract()
     {
         lettersFound++;
         second.GetComponent<Renderer>().enabled = false;
-        second.LeverInteractDelegate -= OnFirstrInteract;
+        second.LeverInteractDelegate -= OnFirstInteract;
         spriteSecond.gameObject.SetActive(false);
         OnInteract();
     }
 
-    public void OnThirdInteract()
+    private void OnThirdInteract()
     {
         lettersFound++;
         third.GetComponent<Renderer>().enabled = false;
-        third.LeverInteractDelegate -= OnFirstrInteract;
+        third.LeverInteractDelegate -= OnFirstInteract;
         spriteThird.gameObject.SetActive(false);
         OnInteract();
     }
@@ -55,5 +62,22 @@ public class TimerPuzzle : MonoBehaviour
         {
             disabler.gameObject.SetActive(false);
         }
+    }
+
+    private void OnPlatformObstaclePressed()
+    {
+        doorAnimator.SetTrigger(AnimationInfos.Door.OpenAnimationTrigger);
+    }
+    
+    private void OnPlatformPlayerPressed()
+    {
+        doorAnimator.SetTrigger(AnimationInfos.Door.OpenAnimationTrigger);
+        StartCoroutine(CloseDoorInTime());
+    }
+
+    private IEnumerator CloseDoorInTime()
+    {
+        yield return new WaitForSeconds(closeDoorIn);
+        doorAnimator.SetTrigger(AnimationInfos.Door.CloseAnimationTrigger);
     }
 }

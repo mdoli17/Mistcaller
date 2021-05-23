@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Helpers;
 using UnityEngine;
 
 public class BerryPuzzle : MonoBehaviour
 {
+    public Animator spikeAnimator;
+    
     public Lever red;
     public Lever blue;
     public Lever yellow;
@@ -128,15 +131,19 @@ public class BerryPuzzle : MonoBehaviour
         _playerCurrentColor = "";
         if (_owlColor.Length == 2)
         {
-            StartCoroutine(ResetOwl()); 
+            
             switch (_owlColor)
             {
                 case "PG":
                 case "GP":
                     onPuzzleComplete();
                     break;
+                default:
+                    StartCoroutine(ResetOwl());
+                    _owlColor = "";
+                    break;
             }
-            _owlColor = "";
+            
         }
         SpriteRenderer renderer = FindObjectOfType<InteractChecker>().gameObject.GetComponent<SpriteRenderer>();
         renderer.sprite = null;
@@ -153,5 +160,13 @@ public class BerryPuzzle : MonoBehaviour
     private void onPuzzleComplete()
     {
         door.SetActive(false);
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
+        {
+            spikeAnimator.SetTrigger(AnimationInfos.Spike.SpikeFallTrigger);
+        }
     }
 }
