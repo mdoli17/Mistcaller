@@ -14,6 +14,8 @@ public class BerryPuzzle : MonoBehaviour
     public Lever pot;
     public Lever owl;
 
+    public Lever caveLever;
+    public GameObject caveDoor;
     public GameObject door;
 
     private const string TargetCommand = "RPGPYP";
@@ -41,6 +43,7 @@ public class BerryPuzzle : MonoBehaviour
         yellow.LeverInteractDelegate += onYellow;
         pot.LeverInteractDelegate += onPot;
         owl.LeverInteractDelegate += onOwl;
+        caveLever.LeverInteractDelegate += OnCaveOpen;
 
         colors = new Dictionary<char, Sprite>();
         colors.Add('R', Red);
@@ -51,7 +54,12 @@ public class BerryPuzzle : MonoBehaviour
         colors.Add('P', Purple);
         
     }
-    
+
+    private void OnCaveOpen()
+    {
+        caveDoor.SetActive(false);
+        caveLever.LeverInteractDelegate -= OnCaveOpen;
+    }
     private void onRed()
     {   
         _playerCurrentColor = "R";
