@@ -176,13 +176,18 @@ public class SaveObjectGeneral
 
         for (int i = 0; i < objects.Count; i++)
         {
-            this.objectsAndPositions.Add(objects[i], positions[i]);
+            objectsAndPositions.Add(objects[i], positions[i]);
         }
+    }
+
+    public SaveObjectGeneral(List<LevelStates> levelStateList)
+    { 
+        this.levelStateList = levelStateList;
     }
 
     public bool levelCompleted;
 
-    public List<LevelStates> LevelStateList;
+    public List<LevelStates> levelStateList;
 
     public Dictionary<GameObject, Vector3> objectsAndPositions;
 }

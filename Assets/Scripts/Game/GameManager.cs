@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Game;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -13,7 +14,8 @@ public class GameManager : MonoBehaviour
     public static GameObject player;
     public static GameObject rock;
 
-
+    
+    
     public static void ResetLevel()
     {
         SaveObject save = SaveManager.shared.ReadFromFile("Autosave");
@@ -31,6 +33,14 @@ public class GameManager : MonoBehaviour
     {
         SaveObject save = new SaveObject(player.transform.position, rock.transform.position);
         SaveManager.shared.WriteToFile(save, "Autosave");
+
+
+        List<LevelStates> list = new List<LevelStates>();
+        foreach (var level in LevelLibrary.instance.levels)
+        {
+            
+        }
+        SaveObjectGeneral levelSaveObject = new SaveObjectGeneral(list);
     }
 }
 
