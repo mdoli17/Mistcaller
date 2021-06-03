@@ -44,11 +44,30 @@ public class SaveManager
         File.WriteAllText(savePath + filename + ".txt", json);
     }
 
+    public void WriteSOGToFile(SaveObjectGeneral save, string filename)
+    {
+        if (!Directory.Exists(savePath))
+        {
+            Directory.CreateDirectory(savePath);
+        }
+
+        string json = JsonUtility.ToJson(save);
+        File.WriteAllText(savePath + filename + ".txt", json);
+    }
+
     public SaveObject ReadFromFile(string filename)
     {
         SaveObject save = null;
         string json = File.ReadAllText(savePath + filename + ".txt");
         save = JsonUtility.FromJson<SaveObject>(json);
+        return save;
+    }
+
+    public SaveObjectGeneral ReadSOGFromFile(string filename)
+    {
+        SaveObjectGeneral save = null;
+        string json = File.ReadAllText(savePath + filename + ".txt");
+        save = JsonUtility.FromJson<SaveObjectGeneral>(json);
         return save;
     }
 }
@@ -130,8 +149,47 @@ public class SaveObject
         this.PlayerPosition = PlayerPosition;
         this.RockPosition = RockPosition;
     }
+
     public Vector3 PlayerPosition;
 
     public Vector3 RockPosition;
     
+}
+
+[Serializable]
+public class SaveObjectGeneral
+{
+    public SaveObjectGeneral()
+    {
+
+    }
+
+    public SaveObjectGeneral(bool levelCompleted,Dictionary<GameObject, Vector3> objectsAndPositions)
+    {
+        this.levelCompleted = levelCompleted;
+        this.objectsAndPositions = objectsAndPositions;
+    }
+
+    public SaveObjectGeneral(bool levelCompleted, List<GameObject> objects, List<Vector3> positions)
+    {
+        this.levelCompleted = levelCompleted;
+
+        for (int i = 0; i < objects.Count; i++)
+        {
+            this.objectsAndPositions.Add(objects[i], positions[i]);
+        }
+    }
+
+    public bool levelCompleted;
+
+    public List<LevelStates> LevelStateList;
+
+    public Dictionary<GameObject, Vector3> objectsAndPositions;
+}
+
+[Serializable]
+public class LevelStates
+{
+    public GameObject Level;
+    public bool State;
 }
