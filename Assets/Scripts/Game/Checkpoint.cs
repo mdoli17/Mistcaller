@@ -5,6 +5,9 @@ using UnityEngine;
 [RequireComponent(typeof(BoxCollider2D))]
 public class Checkpoint : MonoBehaviour
 {
+    [SerializeField]
+    private List<GameObject> objectsToSave;
+
     private BoxCollider2D collider;
     void Awake()
     {
@@ -17,7 +20,8 @@ public class Checkpoint : MonoBehaviour
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-            GameManager.SaveGame();
+            //GameManager.SaveGame();
+            GameManager.SaveGame(objectsToSave);
             Destroy(gameObject);
         }
     }

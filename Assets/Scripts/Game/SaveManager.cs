@@ -10,6 +10,7 @@ using UnityEngine;
 using System.Threading;
 using UnityEditor;
 using System.Security.AccessControl;
+using Game;
 
 public class SaveManager
 {
@@ -164,37 +165,54 @@ public class SaveObjectGeneral
 
     }
 
-    public SaveObjectGeneral(bool levelCompleted,Dictionary<GameObject, Vector3> objectsAndPositions)
+    public SaveObjectGeneral(List<LevelState> levelStateList, List<GameObject> objects, List<Vector3> positions)
     {
-        this.levelCompleted = levelCompleted;
-        this.objectsAndPositions = objectsAndPositions;
-    }
-
-    public SaveObjectGeneral(bool levelCompleted, List<GameObject> objects, List<Vector3> positions)
-    {
-        this.levelCompleted = levelCompleted;
+        this.levelStateList = levelStateList;
 
         for (int i = 0; i < objects.Count; i++)
         {
-            objectsAndPositions.Add(objects[i], positions[i]);
+            objectPositionList.Add(new ObjectPosition(objects[i], positions[i]));
         }
     }
 
-    public SaveObjectGeneral(List<LevelStates> levelStateList)
+    public SaveObjectGeneral(List<LevelState> levelStateList, List<ObjectPosition> objectPositionList)
+    {
+        this.levelStateList = levelStateList;
+        this.objectPositionList = objectPositionList;
+    }
+
+    public SaveObjectGeneral(List<LevelState> levelStateList)
     { 
         this.levelStateList = levelStateList;
     }
 
-    public bool levelCompleted;
+    public List<LevelState> levelStateList;
 
-    public List<LevelStates> levelStateList;
-
-    public Dictionary<GameObject, Vector3> objectsAndPositions;
+    public List<ObjectPosition> objectPositionList;
 }
 
 [Serializable]
-public class LevelStates
+public class LevelState
 {
-    public GameObject Level;
-    public bool State;
+    public LevelState(LevelManager level, bool state)
+    {
+        this.level = level;
+        this.state = state;
+    }
+
+    public LevelManager level;
+    public bool state;
+}
+
+[Serializable]
+public class ObjectPosition
+{
+    public ObjectPosition(GameObject _object, Vector3 position)
+    {
+        this._object = _object;
+        this.position = position;
+    }
+
+    public GameObject _object;
+    public Vector3 position;
 }
