@@ -10,6 +10,7 @@ using UnityEngine;
 using System.Threading;
 using UnityEditor;
 using System.Security.AccessControl;
+using Game;
 
 public class SaveManager
 {
@@ -44,11 +45,30 @@ public class SaveManager
         File.WriteAllText(savePath + filename + ".txt", json);
     }
 
+    public void WriteSOGToFile(SaveObjectGeneral save, string filename)
+    {
+        if (!Directory.Exists(savePath))
+        {
+            Directory.CreateDirectory(savePath);
+        }
+
+        string json = JsonUtility.ToJson(save);
+        File.WriteAllText(savePath + filename + ".txt", json);
+    }
+
     public SaveObject ReadFromFile(string filename)
     {
         SaveObject save = null;
         string json = File.ReadAllText(savePath + filename + ".txt");
         save = JsonUtility.FromJson<SaveObject>(json);
+        return save;
+    }
+
+    public SaveObjectGeneral ReadSOGFromFile(string filename)
+    {
+        SaveObjectGeneral save = null;
+        string json = File.ReadAllText(savePath + filename + ".txt");
+        save = JsonUtility.FromJson<SaveObjectGeneral>(json);
         return save;
     }
 }
@@ -130,8 +150,69 @@ public class SaveObject
         this.PlayerPosition = PlayerPosition;
         this.RockPosition = RockPosition;
     }
+
     public Vector3 PlayerPosition;
 
     public Vector3 RockPosition;
     
+}
+
+[Serializable]
+public class SaveObjectGeneral
+{
+    public SaveObjectGeneral()
+    {
+
+    }
+
+    public SaveObjectGeneral(List<LevelState> levelStateList, List<GameObject> objects, List<Vector3> positions)
+    {
+        this.levelStateList = levelStateList;
+
+        for (int i = 0; i < objects.Count; i++)
+        {
+            objectPositionList.Add(new ObjectPosition(objects[i], positions[i]));
+        }
+    }
+
+    public SaveObjectGeneral(List<LevelState> levelStateList, List<ObjectPosition> objectPositionList)
+    {
+        this.levelStateList = levelStateList;
+        this.objectPositionList = objectPositionList;
+    }
+
+    public SaveObjectGeneral(List<LevelState> levelStateList)
+    { 
+        this.levelStateList = levelStateList;
+    }
+
+    public List<LevelState> levelStateList;
+
+    public List<ObjectPosition> objectPositionList;
+}
+
+[Serializable]
+public class LevelState
+{
+    public LevelState(LevelManager level, bool state)
+    {
+        this.level = level;
+        this.state = state;
+    }
+
+    public LevelManager level;
+    public bool state;
+}
+
+[Serializable]
+public class ObjectPosition
+{
+    public ObjectPosition(GameObject _object, Vector3 position)
+    {
+        this._object = _object;
+        this.position = position;
+    }
+
+    public GameObject _object;
+    public Vector3 position;
 }

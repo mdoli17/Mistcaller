@@ -65,6 +65,7 @@ public class RezosLevelEnabler : MonoBehaviour
             foreach (var _object in next)
             {
                 _object.SetActive(enableNextLevel);
+                //_object.GetComponent<LevelManager>().EnableLevel(enableNextLevel);
             }
         }
 
@@ -73,6 +74,7 @@ public class RezosLevelEnabler : MonoBehaviour
             foreach (var _object in last)
             {
                 _object.SetActive(enableLastLevel);
+                //_object.GetComponent<LevelManager>().EnableLevel(enableLastLevel);
             }
         }
     }
