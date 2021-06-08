@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Game;
 using UnityEngine;
 using UnityEngine.Serialization;
+using UnityEditor;
 
 public class GameManager : MonoBehaviour
 {
@@ -14,8 +15,15 @@ public class GameManager : MonoBehaviour
     public static GameObject player;
     public static GameObject rock;
 
-    
-    
+    [SerializeField] private List<LevelManager> levels;
+
+    public void GenerateLevelGuids()
+    {
+        foreach (var level in levels) 
+        {
+            level.SetLevelId(GUID.Generate().ToString());
+        }
+    }
     public static void ResetLevel()
     {
         SaveObject save = SaveManager.shared.ReadFromFile("Autosave");
@@ -92,6 +100,21 @@ public class GameManager : MonoBehaviour
         SaveManager.shared.WriteSOGToFile(levelSaveObject, "Autosave2");
     }
 
+}
+
+[CustomEditor(typeof(GameManager))]
+public class GameManagerEditor : Editor
+{
+    
+    public override void OnInspectorGUI()
+    {
+        base.OnInspectorGUI();
+
+        if(GUILayout.Button("Generate GUID's"))
+        {
+            ((GameManager)target).GenerateLevelGuids();
+        }
+    }
 }
 
 
