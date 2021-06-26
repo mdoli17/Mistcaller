@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Game;
 using UnityEngine;
 
 public class FishPuzzle : MonoBehaviour
@@ -38,12 +39,14 @@ public class FishPuzzle : MonoBehaviour
     {
         animator.SetBool("CageDropped", true);
         cageObject.transform.position = cageTargetLocation.transform.position;
+        Game.SoundManager.PlaySound(SoundNames.Environment.FishGateFallSound);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.layer != LayerMask.NameToLayer("Player")) return;
-        Debug.Log("AEEAEE");
         animator.SetTrigger("PlayerEntered");
+        Game.SoundManager.PlaySound(SoundNames.Environment.FishBiteSound);
+        Game.SoundManager.PlaySound(SoundNames.Environment.FishPullUpFromWaterSound);
     }
 }

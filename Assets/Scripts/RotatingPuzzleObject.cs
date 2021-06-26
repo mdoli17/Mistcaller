@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using Game;
 using UnityEngine;
 using UnityEditor;
 
@@ -34,10 +35,10 @@ public class RotatingPuzzleObject : MonoBehaviour
         
         foreach (RotatingPuzzleObject obj in objects)
         {
-            
             obj.Increment();
         }
         GetComponentInParent<RotatingPuzzleMaster>().checkPuzzle();
+        Game.SoundManager.PlaySound(SoundNames.Environment.TotemSound);
     }
 
     public int getCurrentNumber()

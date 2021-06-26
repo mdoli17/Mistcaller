@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Game;
 using Helpers;
 using UnityEngine;
 
@@ -34,6 +35,7 @@ public class Lever : MonoBehaviour, Interactable
             }
             player.SetPlayerState(PlayerState.INTERACTING);
             StartCoroutine(ResetInteraction());
+            // Game.SoundManager.PlaySound(SoundNames.Environment.ButtonPressSound);
         }
     }
 

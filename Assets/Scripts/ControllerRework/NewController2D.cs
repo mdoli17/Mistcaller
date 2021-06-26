@@ -69,7 +69,7 @@ public class NewController2D : NewRaycastController {
 
 				float slopeAngle = Vector2.Angle(hit.normal, Vector2.up);
 
-				if (i == 0 && slopeAngle <= maxSlopeAngle) {
+				if (i == 0 && slopeAngle <= maxSlopeAngle || hit.transform.CompareTag("movable")) {
 					if (collisions.descendingSlope) {
 						collisions.descendingSlope = false;
 						moveAmount = collisions.moveAmountOld;
@@ -83,7 +83,7 @@ public class NewController2D : NewRaycastController {
 					moveAmount.x += distanceToSlopeStart * directionX;
 				}
 
-				if (!collisions.climbingSlope || slopeAngle > maxSlopeAngle) {
+				if ((!collisions.climbingSlope || slopeAngle > maxSlopeAngle) && !hit.transform.CompareTag("movable")) {
 					moveAmount.x = (hit.distance - skinWidth) * directionX;
 					rayLength = hit.distance;
 
@@ -172,6 +172,17 @@ public class NewController2D : NewRaycastController {
 
 		RaycastHit2D maxSlopeHitLeft = Physics2D.Raycast (raycastOrigins.bottomLeft, Vector2.down, Mathf.Abs (moveAmount.y) + skinWidth, collisionMask);
 		RaycastHit2D maxSlopeHitRight = Physics2D.Raycast (raycastOrigins.bottomRight, Vector2.down, Mathf.Abs (moveAmount.y) + skinWidth, collisionMask);
+
+		if (maxSlopeHitLeft)
+		{
+			if(maxSlopeHitLeft.transform.CompareTag("movable")) return;
+		}
+
+		if (maxSlopeHitRight)
+		{
+			if (maxSlopeHitRight.transform.CompareTag("movable")) return;
+		}
+
 		if (maxSlopeHitLeft ^ maxSlopeHitRight) {
 			SlideDownMaxSlope (maxSlopeHitLeft, ref moveAmount);
 			SlideDownMaxSlope (maxSlopeHitRight, ref moveAmount);

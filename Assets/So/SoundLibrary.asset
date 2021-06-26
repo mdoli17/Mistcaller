@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c70507c6f804b9a9d9cfe0478593ab1, type: 3}
+  m_Name: SoundLibrary
+  m_EditorClassIdentifier: 
+  sounds:
+  - clipName: PlayerJumpSound
+    audioClip: {fileID: 8300000, guid: 51f0c54706b53c14c9c24bbd63bb18a6, type: 3}
+  - clipName: PlayerStepSoundOne
+    audioClip: {fileID: 8300000, guid: 2b04d78ca632efd469bf3542397cb181, type: 3}
+  - clipName: PlayerStepSoundTwo
+    audioClip: {fileID: 8300000, guid: 135505d2122891c4da2c112841c49a2e, type: 3}
+  - clipName: ButtonPressSound
+    audioClip: {fileID: 8300000, guid: eb2a73fd981006449bf19d7fee4c99fd, type: 3}
+  - clipName: TotemSound
+    audioClip: {fileID: 8300000, guid: cdf7e5ca2ac658c4fbabb20e3d137605, type: 3}
+  - clipName: SpikeFallSound
+    audioClip: {fileID: 8300000, guid: 38872ef8f5a042643ba4fcd82770ce42, type: 3}
+  - clipName: OwlSound
+    audioClip: {fileID: 8300000, guid: 1c2a5e65a56dd6247a679df364112dea, type: 3}
+  - clipName: BerryPickOne
+    audioClip: {fileID: 8300000, guid: e7cd21433483d1449b8c39de0464d598, type: 3}
+  - clipName: BerryPickTwo
+    audioClip: {fileID: 8300000, guid: f1114b03a8c70834c8096eeae4bbe2ae, type: 3}
+  - clipName: BerryPickThree
+    audioClip: {fileID: 8300000, guid: aeb35264bbba6f640ba259b48781a422, type: 3}
+  - clipName: SpikeTouchSound
+    audioClip: {fileID: 8300000, guid: 7ef119a622c40e84cafeff6188bb61a1, type: 3}
+  - clipName: BranchStepSound
+    audioClip: {fileID: 8300000, guid: bdcbb314cf4ea9644878ac8da23b81f6, type: 3}
+  - clipName: BranchFallSound
+    audioClip: {fileID: 8300000, guid: 7c4d16c26c81a8644be6e51f042c9123, type: 3}
+  - clipName: SpikeBallImpactSound
+    audioClip: {fileID: 8300000, guid: 0caed39c1327b664698f1d09f08dbe0f, type: 3}
+  - clipName: ElevatorBackgroundMusic
+    audioClip: {fileID: 8300000, guid: a7dbc843a93f045498f5f640bb38a708, type: 3}
+  - clipName: DrumLowSound
+    audioClip: {fileID: 8300000, guid: 92f7b951bc1743143acdfd09ac7c980c, type: 3}
+  - clipName: DrumMidSound
+    audioClip: {fileID: 8300000, guid: 306a1b5dcbb4b084b8116daaf564ff54, type: 3}
+  - clipName: DrumHighSound
+    audioClip: {fileID: 8300000, guid: 119f6c393f018b642a9552716a1ccbf0, type: 3}
+  - clipName: FishBiteSound
+    audioClip: {fileID: 8300000, guid: 1d163481f9485f9448e2180e0edefcdb, type: 3}
+  - clipName: FishFromWaterSound
+    audioClip: {fileID: 8300000, guid: e12471cc2cbc9ef48a587dc86e5fd5bc, type: 3}
+  - clipName: DoorOpenSound
+    audioClip: {fileID: 8300000, guid: bd25fa3e1a866354589a835cf90b4a5e, type: 3}
+  - clipName: ElevatorMoveSound
+    audioClip: {fileID: 8300000, guid: 31654361e8d01a146bdcf531df21a43b, type: 3}
+  - clipName: PotSplashSound
+    audioClip: {fileID: 8300000, guid: 48fc2e61f9bf43c4fa48b4949580f13d, type: 3}
+  - clipName: FishGateFallSound
+    audioClip: {fileID: 8300000, guid: 758027a5625ad4c4cb4c2b03d6478b87, type: 3}

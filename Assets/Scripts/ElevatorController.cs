@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Game;
 using UnityEngine;
 
 public class ElevatorController : RaycastController
@@ -16,6 +17,9 @@ public class ElevatorController : RaycastController
 		base.Start ();
         col = GetComponentsInChildren<BoxCollider2D>()[1];
 	}
+
+
+	private bool hasStarted = false;
 	void Update () {
 		
 		UpdateRaycastOrigins ();
@@ -23,8 +27,13 @@ public class ElevatorController : RaycastController
 		Vector3 velocity = move * Time.deltaTime;
         
         if(col.IsTouchingLayers(passengerMask)) {
+	        if (!hasStarted)
+	        {
+		        Game.SoundManager.PlaySound(SoundNames.Environment.ElevatorMoveSound);
+	        }
 	        if (transform.position.y < endPosition.position.y)
 	        {
+		        hasStarted = true;
 		        transform.Translate(velocity);
 			    MovePassengers(velocity);
 	        }

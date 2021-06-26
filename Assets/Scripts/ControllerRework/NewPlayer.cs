@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Game;
 
 [RequireComponent (typeof (NewController2D))]
 public class NewPlayer : MonoBehaviour {
@@ -69,6 +70,12 @@ public class NewPlayer : MonoBehaviour {
 		if(playerState != PlayerState.INTERACTING && playerState != PlayerState.ONROPE)
         {
 			controller.Move (velocity * Time.deltaTime, directionalInput);
+			if (directionalInput.x != 0)
+			{
+				var index = Random.Range(0, 2);
+			
+				Game.SoundManager.PlaySound(index == 0 ? SoundNames.Player.StepSoundOne : SoundNames.Player.StepSoundTwo);
+			}
         }
 
 		if (controller.collisions.above || controller.collisions.below) {
@@ -172,6 +179,7 @@ public class NewPlayer : MonoBehaviour {
 				numOfJumps--;
 				velocity.y = maxJumpVelocity;
 			}
+			Game.SoundManager.PlaySound(SoundNames.Player.JumpSound);
 		}
 		else
 		{

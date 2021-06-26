@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Game;
 using UnityEngine;
 
 public class RotatingPuzzleMaster : MonoBehaviour
@@ -26,6 +27,6 @@ public class RotatingPuzzleMaster : MonoBehaviour
     {
         Debug.Log("Puzzle Solved");
         doorAnimator.SetTrigger("Door Opened");
-        
+        Game.SoundManager.PlaySound(SoundNames.Environment.DoorOpenSound);
     }
 }

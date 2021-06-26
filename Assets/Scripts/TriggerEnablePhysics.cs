@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Game;
 using UnityEngine;
 
 public class TriggerEnablePhysics : MonoBehaviour
@@ -33,12 +34,14 @@ public class TriggerEnablePhysics : MonoBehaviour
             {
                 Debug.Log(jumpAmmount);
                 jumpAmmount--;
+                Game.SoundManager.PlaySound(SoundNames.Environment.BranchStepSound);
             }
                 
             
             if(jumpAmmount == 0)
             {
                 ObjectToRotate.transform.Rotate(new Vector3(0, 0, -35));
+                Game.SoundManager.PlaySound(SoundNames.Environment.BranchFallSound);
             }
         }
     }

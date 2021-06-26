@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Game;
 using UnityEngine;
 
 [RequireComponent(typeof(PolygonCollider2D))]
@@ -19,6 +20,7 @@ public class DeathPad : MonoBehaviour
         {
             Debug.Log("Player Entered");
             player = other.gameObject;
+            Game.SoundManager.PlaySound(SoundNames.Game.SpikeDeathSound);
             StartCoroutine(ResetPlayer());
         }
     }
@@ -28,6 +30,7 @@ public class DeathPad : MonoBehaviour
         player.GetComponent<NewPlayerInput>().enabled = false;
         yield return new WaitForSeconds(2);
         player.GetComponent<NewPlayerInput>().enabled = true;
+        player = null;
         GameManager.ResetLevel();
     }
 }

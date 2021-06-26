@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Game;
 using UnityEngine;
 
 public class BellPuzzle : MonoBehaviour
@@ -30,6 +31,7 @@ public class BellPuzzle : MonoBehaviour
         current += "H";
         CheckCondition();
         if(highNoteAnimator) highNoteAnimator.SetTrigger("Note Player");
+        Game.SoundManager.PlaySound(SoundNames.Environment.DrumHighSound);
     }
 
     private void onMid()
@@ -37,6 +39,7 @@ public class BellPuzzle : MonoBehaviour
         current += "M";
         CheckCondition();
         if(midNoteAnimator) midNoteAnimator.SetTrigger("Note Player");
+        Game.SoundManager.PlaySound(SoundNames.Environment.DrumMidSound);
 
     }
 
@@ -45,6 +48,7 @@ public class BellPuzzle : MonoBehaviour
         current += "L";
         CheckCondition();
         if (lowNoteAnimator) lowNoteAnimator.SetTrigger("Note Player");
+        Game.SoundManager.PlaySound(SoundNames.Environment.DrumLowSound);
     }   
 
     private void CheckCondition()
@@ -53,8 +57,11 @@ public class BellPuzzle : MonoBehaviour
             current = current.Substring(1);
 
         if (current == TargetCommand)
+        {
             elevator.ResetPlatform();
-        
+            Game.SoundManager.PlaySound(SoundNames.Environment.ElevatorBackgroundMusic);
+        }
+            
 
     }
 }

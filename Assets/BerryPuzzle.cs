@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Game;
 using Helpers;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class BerryPuzzle : MonoBehaviour
 {
@@ -67,6 +69,20 @@ public class BerryPuzzle : MonoBehaviour
         renderer.sprite = Red;
         renderer.drawMode = SpriteDrawMode.Sliced;
         renderer.size = new Vector2(0.3f,0.25f);
+
+        var index = Random.Range(0, 3);
+        switch (index)
+        {
+            case 1:
+                Game.SoundManager.PlaySound(SoundNames.Environment.BerryPickOne);
+                break;
+            case 2:
+                Game.SoundManager.PlaySound(SoundNames.Environment.BerryPickTwo);
+                break;
+            case 3:
+                Game.SoundManager.PlaySound(SoundNames.Environment.BerryPickThree);
+                break;
+        }
     }
 
     private void onBlue()
@@ -76,6 +92,19 @@ public class BerryPuzzle : MonoBehaviour
         renderer.sprite = Blue;
         renderer.drawMode = SpriteDrawMode.Sliced;
         renderer.size = new Vector2(0.3f,0.25f);
+        var index = Random.Range(0, 3);
+        switch (index)
+        {
+            case 1:
+                Game.SoundManager.PlaySound(SoundNames.Environment.BerryPickOne);
+                break;
+            case 2:
+                Game.SoundManager.PlaySound(SoundNames.Environment.BerryPickTwo);
+                break;
+            case 3:
+                Game.SoundManager.PlaySound(SoundNames.Environment.BerryPickThree);
+                break;
+        }
     }
 
     private void onYellow() 
@@ -85,6 +114,19 @@ public class BerryPuzzle : MonoBehaviour
         renderer.sprite = Yellow;
         renderer.drawMode = SpriteDrawMode.Sliced;
         renderer.size = new Vector2(0.3f,0.25f);
+        var index = Random.Range(0, 3);
+        switch (index)
+        {
+            case 1:
+                Game.SoundManager.PlaySound(SoundNames.Environment.BerryPickOne);
+                break;
+            case 2:
+                Game.SoundManager.PlaySound(SoundNames.Environment.BerryPickTwo);
+                break;
+            case 3:
+                Game.SoundManager.PlaySound(SoundNames.Environment.BerryPickThree);
+                break;
+        }
     } 
     private void onPot()
     {
@@ -122,6 +164,7 @@ public class BerryPuzzle : MonoBehaviour
             SpriteRenderer renderer = FindObjectOfType<InteractChecker>().gameObject.GetComponent<SpriteRenderer>();
             renderer.sprite = null;
         }
+        Game.SoundManager.PlaySound(SoundNames.Environment.PotSplashSound);
     }
 
     private void onOwl()
@@ -155,6 +198,7 @@ public class BerryPuzzle : MonoBehaviour
         }
         SpriteRenderer renderer = FindObjectOfType<InteractChecker>().gameObject.GetComponent<SpriteRenderer>();
         renderer.sprite = null;
+        Game.SoundManager.PlaySound(SoundNames.Environment.OwlSound);
     }
     
 
@@ -175,6 +219,7 @@ public class BerryPuzzle : MonoBehaviour
         if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
             spikeAnimator.SetTrigger(AnimationInfos.Spike.SpikeFallTrigger);
+            Game.SoundManager.PlaySound(SoundNames.Environment.SpikeFallSound);
         }
     }
 }
