@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -42,7 +43,11 @@ public class RopeScript : MonoBehaviour
         if(player) {
             SimulatePlayerOnRope();
         }
+
+
     }
+
+
 
     private void FixedUpdate()
     {
@@ -236,6 +241,7 @@ public class RopeScript : MonoBehaviour
         Gizmos.DrawSphere(startPoint.position, 0.5f);
         Gizmos.color = Color.red;
         Gizmos.DrawSphere(startPoint.position - new Vector3(0f, globalDif,0), 0.1f);
+        if(PlayerStartTransform) Gizmos.DrawSphere(PlayerStartTransform.position, 0.5f);
         
     }
 
